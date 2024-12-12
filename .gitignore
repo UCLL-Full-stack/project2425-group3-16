@@ -1,3 +1,7 @@
+#remove the .idea folder form Webstom
+.idea/
+ .idea/workspace.xml
+
 # Logs
 logs
 *.log
@@ -104,4 +108,4 @@ dist
 .tern-port
 
 .DS_Store
-.vscode
+.vscode.idea/workspace.xml

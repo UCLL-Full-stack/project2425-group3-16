@@ -1,18 +1,20 @@
 import { Tag } from './tags';
 import { User } from './user';
+import {RecipeIngredient} from "./recipeingredient";
 
 export class Recipe {
-    private _recipeId?: number;
-    private _user: User;
-    private _title: string;
-    private _description: string;
-    private _instructions: string;
-    private _nutritionFacts: string;
-    private _cookingTips: string;
-    private _extraNotes: string;
-    private _createdAt: Date;
-    private _updatedAt: Date;
-    private _tags: Tag[];
+    private recipeId?: number;
+    private user: User;
+    private title: string;
+    private description: string;
+    private instructions: string;
+    private nutritionFacts: string;
+    private cookingTips: string;
+    private extraNotes: string;
+    private createdAt: Date;
+    private updatedAt: Date;
+    private tags: Tag[];
+    private recipeIngredients: RecipeIngredient[];
 
     constructor(recipe: {
         recipeId?: number;
@@ -26,106 +28,60 @@ export class Recipe {
         createdAt: Date;
         updatedAt: Date;
         tags: Tag[];
+        recipeIngredients: RecipeIngredient[]
     }) {
         this.validate(recipe);
 
-        this._recipeId = recipe.recipeId;
-        this._user = recipe.user;
-        this._title = recipe.title;
-        this._description = recipe.description;
-        this._instructions = recipe.instructions;
-        this._nutritionFacts = recipe.nutritionFacts;
-        this._cookingTips = recipe.cookingTips;
-        this._extraNotes = recipe.extraNotes;
-        this._createdAt = recipe.createdAt;
-        this._updatedAt = recipe.updatedAt;
-        this._tags = recipe.tags;
+        this.recipeId = recipe.recipeId;
+        this.user = recipe.user;
+        this.title = recipe.title;
+        this.description = recipe.description;
+        this.instructions = recipe.instructions;
+        this.nutritionFacts = recipe.nutritionFacts;
+        this.cookingTips = recipe.cookingTips;
+        this.extraNotes = recipe.extraNotes;
+        this.createdAt = recipe.createdAt;
+        this.updatedAt = recipe.updatedAt;
+        this.tags = recipe.tags;
+        this.recipeIngredients = recipe.recipeIngredients
     }
 
     public getRecipeId(): number | undefined {
-        return this._recipeId;
+        return this.recipeId;
     }
 
-    // no setter need for the id
-    
     public getUser(): User {
-        return this._user;
+        return this.user;
     }
-
-    public setUser(user: User): void {
-        this._user = user;
-    }
-
     public getTitle(): string {
-        return this._title;
+        return this.title;
     }
-
-    public setTitle(title: string): void {
-        this._title = title;
-    }
-
     public getDescription(): string {
-        return this._description;
+        return this.description;
     }
-
-    public setDescription(description: string): void {
-        this._description = description;
-    }
-
     public getInstructions(): string {
-        return this._instructions;
+        return this.instructions;
     }
-
-    public setInstructions(instructions: string): void {
-        this._instructions = instructions;
-    }
-
     public getNutritionFacts(): string {
-        return this._nutritionFacts;
+        return this.nutritionFacts;
     }
-
-    public setNutritionFact(nutritionFacts: string): void {
-        this._nutritionFacts = nutritionFacts;
-    }
-
     public getCookingTips(): string {
-        return this._cookingTips;
+        return this.cookingTips;
     }
-
-    public setCookingTips(cookingTips: string): void {
-        this._cookingTips = cookingTips;
-    }
-
     public getExtraNotes(): string {
-        return this._extraNotes;
+        return this.extraNotes;
     }
-
-    public setExtraNotes(extraNotes: string): void {
-        this._extraNotes = extraNotes;
-    }
-
     public getCreationDate(): Date {
-        return this._createdAt;
+        return this.createdAt;
     }
-
-    public setCreationDate(): void {
-        this._createdAt = new Date();
-    }
-
     public getUpdateAt(): Date {
-        return this._updatedAt;
+        return this.updatedAt;
     }
-
-    public setUpdatedAt(updatedAt: Date): void {
-        this._updatedAt = updatedAt;
-    }
-
     public getTags(): Tag[] {
-        return this._tags;
+        return this.tags;
     }
-
-    public setTags(tags: Tag[]): void {
-        this._tags = tags;
+    public getRecipeIngredients (): RecipeIngredient[] {
+        return this.recipeIngredients
     }
 
     private validate(recipe: {
@@ -174,17 +130,17 @@ export class Recipe {
 
     equals(recipe: Recipe): boolean {
         return (
-            this._recipeId === recipe._recipeId &&
-            this._user === recipe._user &&
-            this._title === recipe._title &&
-            this._description === recipe._description &&
-            this._instructions === recipe._instructions &&
-            this._nutritionFacts === recipe._nutritionFacts &&
-            this._cookingTips === recipe._cookingTips &&
-            this._extraNotes === recipe._extraNotes &&
-            this._createdAt === recipe._createdAt &&
-            this._updatedAt === recipe._updatedAt &&
-            this._tags.every((tag, index) => tag.equals(recipe.getTags()[index]))
+            this.recipeId === recipe.recipeId &&
+            this.user === recipe.user &&
+            this.title === recipe.title &&
+            this.description === recipe.description &&
+            this.instructions === recipe.instructions &&
+            this.nutritionFacts === recipe.nutritionFacts &&
+            this.cookingTips === recipe.cookingTips &&
+            this.extraNotes === recipe.extraNotes &&
+            this.createdAt === recipe.createdAt &&
+            this.updatedAt === recipe.updatedAt &&
+            this.tags.every((tag, index) => tag.equals(recipe.getTags()[index]))
         );
     }
 }

@@ -40,7 +40,8 @@ const recipe = new Recipe({
     extraNotes: "",
     createdAt: created,
     updatedAt: updated,
-    tags: []
+    tags: [],
+    recipeIngredients: []
 })
 
 let createRecipeMock: jest.Mock;
@@ -57,7 +58,21 @@ afterEach(() => {
 test('given a valid recipe, when recipe is created, then recipe is created with those values', () => {
     //given
     mockRecipeGetRecipeById = jest.fn().mockReturnValue(recipe)
-    createRecipeMock = jest.fn().mockReturnValue((new Recipe({recipeId: 1, user: new User({id: 1, username: '@BobHope', firstName: 'Bob', lastName: 'Hope', email: 'bobhope@gmail.com', password: 'bob123', role: 'user',}), title: title, description: description, instructions: instructions, nutritionFacts: "", cookingTips: "", extraNotes: "", createdAt: created, updatedAt: updated, tags: []})))
+    createRecipeMock = jest.fn().mockReturnValue((new Recipe({
+        recipeId: 1,
+        user:
+            new User({id: 1, username: '@BobHope', firstName: 'Bob', lastName: 'Hope', email: 'bobhope@gmail.com', password: 'bob123', role: 'user',}),
+        title: title,
+        description: description,
+        instructions: instructions,
+        nutritionFacts: "",
+        cookingTips: "",
+        extraNotes: "",
+        createdAt: created,
+        updatedAt: updated,
+        tags: [],
+        recipeIngredients: []
+    })))
     jest.spyOn(recipeService, 'createRecipe').mockImplementation(createRecipeMock)
     //when
     recipeService.createRecipe({user: user, ingredients: new Array<RecipeIngredientInput>, title: title, description: description, instructions: instructions, nutritionFacts: "", cookingTips: "", extraNotes: "", createdAt: created, updatedAt: updated, tags: [], })

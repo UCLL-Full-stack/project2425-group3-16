@@ -1,43 +1,49 @@
+import {Ingredient} from "./ingredient";
+import {Recipe} from "./recipe";
+
 export class RecipeIngredient {
-    private _recipeIngredientId?: number;
-    private _recipeId: number;
-    private _ingredientId: number;
-    private _unit: string;
-    private _quantity: number;
+    private recipeIngredientId?: number;
+    private recipe: Recipe;
+    private ingredient: Ingredient;
+    private unit: string;
+    private quantity: number;
+
 
 
     constructor(recipeIngredient: {
         recipeIngredientId?: number;
-        recipeId: number;
-        ingredientId: number;
+        recipe: Recipe
+        ingredient: Ingredient
         unit: string;
         quantity: number;
+
     }) {
-        this._recipeIngredientId = recipeIngredient.recipeIngredientId;
-        this._recipeId = recipeIngredient.recipeId;
-        this._ingredientId = recipeIngredient.ingredientId;
-        this._unit = recipeIngredient.unit;
-        this._quantity = recipeIngredient.quantity;
+        this.recipeIngredientId = recipeIngredient.recipeIngredientId;
+        this.recipe = recipeIngredient.recipe;
+        this.unit = recipeIngredient.unit;
+        this.quantity = recipeIngredient.quantity;
+        this.ingredient = recipeIngredient.ingredient;
     }
 
     getRecipeIngredientId(): number| undefined {
-        return this._recipeIngredientId;
+        return this.recipeIngredientId;
     }
 
-    getRecipeId(): number {
-        return this._recipeId;
+    getRecipe(): Recipe {
+        return this.recipe;
     }
 
-    getIngredientId(): number {
-        return this._ingredientId;
-    }
 
     getUnit(): string {
-        return this._unit;
+        return this.unit;
     }
 
     getQuantity(): number {
-        return this._quantity;
+        return this.quantity;
+    }
+
+    getIngredient():Ingredient {
+        return this.ingredient;
     }
 
     /**

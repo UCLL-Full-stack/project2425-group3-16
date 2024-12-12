@@ -1,18 +1,11 @@
 import { Appliance } from '../../model/appliance';
 
-let applianceId: number | undefined;
-let name: string;
-let description: string;
-let createdAt: Date;
-let updatedAt: Date | undefined;
+let applianceId: number | undefined = undefined;
+let name: string = "cooking robot"
+let description: string = "Automated smart kitchen assistant robot"
+let createdAt: Date = new Date()
+let updatedAt: Date | undefined = undefined;
 
-beforeEach(() => {
-    applianceId = undefined;
-    name = 'cooking robot';
-    description = 'Automated smart kitchen assistant robot';
-    createdAt = new Date();
-    updatedAt = undefined;
-});
 
 test(`given: valid values for appliance, when: appliance is created, then: appliance is created with those values`, () => {
     // when

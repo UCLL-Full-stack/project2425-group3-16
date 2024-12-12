@@ -1,6 +1,7 @@
 import {Recipe} from '../../model/recipe';
 import {User} from '../../model/user';
 import {Tag} from '../../model/tags';
+import {RecipeIngredient} from "../../model/recipeingredient";
 
 
 const recipeId: number | undefined = undefined;
@@ -22,6 +23,7 @@ const extraNotes: string = 'Can be stored in the fridge for up to 3 days.';
 const createdAt: Date = new Date('2023-01-01T00:00:00Z');
 const updatedAt: Date = new Date('2023-01-02T00:00:00Z');
 const tags: Tag[] = [new Tag({name: 'Italian', description: 'Food from Italy'})];
+const recipeIngredients: RecipeIngredient[] = []
 
 test(`given: valid values for recipe, when: recipe is created, then: recipe is created with those values`, () => {
     // given
@@ -38,6 +40,7 @@ test(`given: valid values for recipe, when: recipe is created, then: recipe is c
         createdAt,
         updatedAt,
         tags,
+        recipeIngredients
     });
 
     // then
@@ -67,6 +70,7 @@ test(`given: two equal recipe's, when: the recipe.equals method is called, then:
         createdAt,
         updatedAt,
         tags,
+        recipeIngredients
     });
 
     //when
@@ -90,6 +94,7 @@ test(`given: two different recipe's ,when: the recipe.equals method is called, t
         createdAt,
         updatedAt,
         tags,
+        recipeIngredients
     });
 
     const recipe2 = new Recipe({
@@ -104,6 +109,7 @@ test(`given: two different recipe's ,when: the recipe.equals method is called, t
         createdAt,
         updatedAt,
         tags,
+        recipeIngredients
     });
 
     //when

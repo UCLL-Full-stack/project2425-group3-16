@@ -1,7 +1,5 @@
-import { scheduler } from "timers/promises";
 import { Recipe } from "../model/recipe";
 import { User } from "../model/user";
-import {RecipeIngredient} from "../model/recipeingredient";
 import {Tag} from "../model/tags";
 
 const recipes: Recipe[] = [
@@ -35,7 +33,8 @@ const recipes: Recipe[] = [
                 name: 'Vegetarian',
                 description: 'Dishes that do not contain meat or fish.',
             })
-        ]
+        ],
+        recipeIngredients: []
     }),
     new Recipe({
         recipeId: 2,
@@ -67,7 +66,8 @@ const recipes: Recipe[] = [
                 name: 'Vegetarian',
                 description: 'Dishes that do not contain meat or fish.',
             })
-        ]
+        ],
+        recipeIngredients: []
     }),
     new Recipe({
         recipeId: 3,
@@ -99,7 +99,8 @@ const recipes: Recipe[] = [
                 name: 'Vegetarian',
                 description: 'Dishes that do not contain meat or fish.',
             })
-        ]
+        ],
+        recipeIngredients: []
     }),
     new Recipe({
         recipeId: 4,
@@ -151,7 +152,8 @@ const recipes: Recipe[] = [
                 name: 'Vegetarian',
                 description: 'Dishes that do not contain meat or fish.',
             })
-        ]
+        ],
+        recipeIngredients: []
     })
 ]
 

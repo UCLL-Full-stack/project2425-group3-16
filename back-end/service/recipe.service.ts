@@ -71,7 +71,8 @@ const createRecipe = ({
             extraNotes,
             createdAt,
             updatedAt,
-            tags
+            tags,
+            recipeIngredients: []
         })
     } catch (error) {
         throw new Error(`you did not provide use with a valid Recipe error: ${error}`)
