@@ -73,6 +73,8 @@ const recipeRouter = express.Router();
  * @swagger
  * /recipes:
  *   post:
+ *     tags:
+ *       - Recipe
  *     summary: Post a new Recipe.
  *     requestBody:
  *       required: true
@@ -82,13 +84,13 @@ const recipeRouter = express.Router();
  *             $ref: '#/components/schemas/RecipeInput'
  *     responses:
  *       200:
- *         description: the created recipe
+ *         description: The created recipe
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Recipe'
  *       400:
- *         description: bad request
+ *         description: Bad request
  *         content:
  *           application/json:
  *             schema:
@@ -113,6 +115,8 @@ recipeRouter.post('/', async (req: Request, res: Response, next: NextFunction) =
  * @swagger
  * /recipes:
  *   get:
+ *     tags:
+ *       - Recipe
  *     summary: Retrieve a list of all recipes.
  *     responses:
  *       200:
@@ -138,6 +142,8 @@ recipeRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
  * @swagger
  * /recipes/{id}:
  *   get:
+ *     tags:
+ *       - Recipe
  *     summary: Retrieve a recipe by ID.
  *     parameters:
  *       - in: path

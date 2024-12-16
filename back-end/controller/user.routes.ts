@@ -27,6 +27,6 @@
 
 import express from "express";
 
-const userRoutes = express.Router()
+const userRouter = express.Router()
 
-export {userRoutes}
+export {userRouter}

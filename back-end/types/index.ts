@@ -1,3 +1,11 @@
+type ApplianceInput = {
+    applianceId?: number
+    name: string
+    description: string
+    created_at: Date
+    updated_at?: Date
+}
+
 type RecipeIngredientInput = {
     recipeingredientId?: number;
     recipeId: number;
@@ -40,4 +48,4 @@ type TagInput = {
 }
 
 
-export { RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput };
+export { ApplianceInput, RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput };
