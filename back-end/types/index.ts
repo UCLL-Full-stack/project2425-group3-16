@@ -5,11 +5,19 @@ type ApplianceInput = {
     created_at: Date
     updated_at?: Date
 }
+type IngredientsInput = {
+    ingredientId?: number;
+    name: string;
+    description: string;
+    caloriesPerUnit: number;
+    fatPerUnit: number
+    carbsPerUnit: number;
+    proteinPerUnit: number;
+}
 
 type RecipeIngredientInput = {
-    recipeingredientId?: number;
-    recipeId: number;
-    ingredientId: number;
+    recipeIngredientId?: number;
+    ingredient: IngredientsInput;
     unit: string;
     quantity: number;
 };
@@ -48,4 +56,4 @@ type TagInput = {
 }
 
 
-export { ApplianceInput, RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput };
+export { ApplianceInput, IngredientsInput, RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput };

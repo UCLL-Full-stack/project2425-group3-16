@@ -7,6 +7,8 @@ import swaggerUi from 'swagger-ui-express';
 import {applianceRouter} from "./controller/appliance.routes";
 import {tagRouter} from "./controller/tag.routes";
 import {userRouter} from "./controller/user.routes";
+import { ingredientRouter } from './controller/Ingredient.routes';
+import { recipeIngredientRouter } from './controller/recipeIngredient.routes';
 
 const app = express();
 dotenv.config();
@@ -23,6 +25,8 @@ app.use((req, res, next) => {
 app.use('/appliance', applianceRouter);
 app.use('/tag', tagRouter);
 app.use('/user', userRouter)
+app.use('/ingredient', ingredientRouter)
+app.use('/recipeIngredient', recipeIngredientRouter)
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Courses API is running...' });

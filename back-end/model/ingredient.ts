@@ -8,7 +8,7 @@ export class Ingredient {
     private fatPerUnit: number
     private carbsPerUnit: number;
     private proteinPerUnit: number;
-    private recipeIngredients?: RecipeIngredient[];
+    //private recipeIngredients?: RecipeIngredient[];
 
     constructor(ingredient: {
         ingredientId?: number,
@@ -18,7 +18,7 @@ export class Ingredient {
         fatPerUnit: number,
         carbsPerUnit: number,
         proteinPerUnit:number
-        recipeIngredients?: RecipeIngredient[]
+        //recipeIngredients?: RecipeIngredient[]
     }) {
         this.ingredientId= ingredient.ingredientId
         this.name = ingredient.name
@@ -27,7 +27,7 @@ export class Ingredient {
         this.fatPerUnit = ingredient.fatPerUnit
         this.carbsPerUnit = ingredient.carbsPerUnit
         this.proteinPerUnit = ingredient.proteinPerUnit
-        this.recipeIngredients = ingredient.recipeIngredients
+        //this.recipeIngredients = ingredient.recipeIngredients
     }
 
     getIngredientId (): number | undefined {
@@ -58,10 +58,39 @@ export class Ingredient {
         return this.proteinPerUnit
     }
 
-    getRecipeIngredients(): RecipeIngredient[] | undefined {
-        return this.recipeIngredients
-    }
+    // getRecipeIngredients(): RecipeIngredient[] | undefined {
+    //     return this.recipeIngredients
+    // }
 
+
+    validate(i: {
+        ingredientId?: number,
+        name: string,
+        description: string,
+        caloriesPerUnit: number,
+        fatPerUnit: number,
+        carbsPerUnit: number,
+        proteinPerUnit:number
+    }): void {
+        if (!i.name?.trim()) {
+            throw new Error("Name is required");
+        }
+        if (!i.description?.trim()) {
+            throw new Error("Description is required");
+        }
+        if (i.caloriesPerUnit <= 0) {
+            throw new Error("Calories per unit must be greater than 0");
+        }
+        if (i.fatPerUnit < 0) {
+            throw new Error("Fat per unit cannot be negative");
+        }
+        if (i.carbsPerUnit < 0) {
+            throw new Error("Carbs per unit cannot be negative");
+        }
+        if (i.proteinPerUnit < 0) {
+            throw new Error("Protein per unit cannot be negative");
+        }
+    }
 
     equals(ingredient: Ingredient): boolean {
         return (
