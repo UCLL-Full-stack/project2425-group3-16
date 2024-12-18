@@ -1,67 +1,84 @@
-import {Appliance} from "../model/appliance";
+import { Appliance } from '../model/appliance';
+import database from './database';
 
-const appliances: Appliance[] = [
-    new Appliance({
-        applianceId: 1,
-        name: 'Air Fryer',
-        description: 'Healthy fast cooking appliance.',
-        created_at: new Date()
-    }),
-    new Appliance({
-        applianceId: 2,
-        name: 'cooking pan',
-        description: 'Versatile stove top cooking tool.',
-        created_at: new Date()
-    })
-];
-
-const createAppliance = ({ appliance }: { appliance: Appliance }): Appliance => {
-    const newAppliance: Appliance = new Appliance({
-        applianceId: appliances.length + 1,
-        name: appliance.getName(),
-        description: appliance.getDescription(),
-        created_at: appliance.getCreatedAt(),
-        updated_at: appliance.getUpdatedAt()
-    });
-    appliances.push(newAppliance);
-    return newAppliance;
+const createAppliance = async ({ newAppliance }: { newAppliance: Appliance }): Promise<Appliance | null> => {
+    try {
+        const appliancePrisma = await database.appliance.create({
+            data: {
+                name: newAppliance.getName(),
+                description: newAppliance.getDescription(),
+                createdAt: newAppliance.getCreatedAt(),
+                updatedAt: newAppliance.getUpdatedAt()
+            }
+        });
+        return appliancePrisma ? Appliance.from(appliancePrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 };
 
-const updateAppliance = (
-    {applianceId}: {applianceId: number},
-    {newAppliance}: {newAppliance: Appliance}
-): Appliance | null => {
-    const oldAppliance: Appliance | null  = getApplianceById({applianceId: applianceId})
-    if (!oldAppliance) return null;
-    const appliance: Appliance = new Appliance({
-        applianceId: oldAppliance.getApplianceId(),
-        name: newAppliance.getName() ?? oldAppliance.getName(),
-        description: newAppliance.getDescription() ?? oldAppliance.getDescription(),
-        created_at: oldAppliance.getCreatedAt(),
-        updated_at: newAppliance.getUpdatedAt() ?? new Date()
-    });
-    const index: number = appliances.findIndex(a => a.getApplianceId() === applianceId)
-    if(index !== -1 ){appliances[index] = appliance}
-    return appliance ?? null;
+const updateAppliance = async (
+    { applianceId }: { applianceId: number },
+    { newAppliance }: { newAppliance: Appliance }
+): Promise<Appliance | null> => {
+    try {
+        const appliancePrisma = await database.appliance.update({
+            where: { applianceId: applianceId },
+            data: {
+                name: newAppliance.getName(),
+                description: newAppliance.getDescription(),
+                createdAt: newAppliance.getCreatedAt(),
+                updatedAt: newAppliance.getUpdatedAt()
+            }
+        });
+        return Appliance.from(appliancePrisma) ?? null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-}
 
-const getAllAppliances = (): Appliance[] => appliances
+const getAllAppliances = async (): Promise<Appliance[]> => {
+    try {
+        const appliancePrisma = await database.appliance.findMany();
+        return appliancePrisma.map(a => Appliance.from(a));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-const getApplianceById = ({applianceId}: {applianceId: number}): Appliance | null =>{
-    return  appliances.find((a) => a.getApplianceId() === applianceId) || null
-}
 
-const deleteAppliance = ({applianceId}: {applianceId: number}): void | null => {
-    const index: number = appliances.findIndex(a => a.getApplianceId() === applianceId);
-    if(index === -1 ){return  null}
-    appliances.splice(index, 1)
-}
+const getApplianceById = async ({ applianceId }: { applianceId: number }): Promise<Appliance | null> => {
+    try {
+        const appliancePrisma = await database.appliance.findUnique({
+            where: { applianceId: applianceId }
+        });
+        return appliancePrisma ? Appliance.from(appliancePrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-export  default {
+const deleteAppliance = async ({ applianceId }: { applianceId: number }): Promise<boolean> => {
+    try {
+        const result = await database.appliance.delete({
+            where: { applianceId: applianceId }
+        });
+        return !!result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default {
     createAppliance,
     updateAppliance,
     getAllAppliances,
     getApplianceById,
     deleteAppliance
-}
+};

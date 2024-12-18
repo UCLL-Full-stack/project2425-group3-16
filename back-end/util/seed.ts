@@ -1,40 +1,126 @@
 //Execute: npx ts-node util/seed.ts
 
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 import { set } from 'date-fns';
-// import bcrypt from 'bcrypt';
+
 
 const prisma = new PrismaClient();
 
 const main = async () => {
-    await prisma.user.deleteMany();
-    await prisma.recipe.deleteMany();
+    await prisma.appliance.deleteMany();
+    await prisma.tag.deleteMany();
+    await prisma.ingredient.deleteMany();
 
-
-
-    const jp = await prisma.user.create({
+    const airFryer = await prisma.appliance.create({
         data: {
-            username: 'johanp',
-            firstName: 'Johan',
-            lastName: 'Pieck',
-            email: 'johan.pieck@ucll.be',
-            password: 'johanp123',
-        },
+            name: 'Air Fryer',
+            description: 'A kitchen appliance that cooks by circulating hot air around the food.',
+            createdAt: new Date()
+        }
     });
 
-    await prisma.recipe.create({
+    const cookingPan = await prisma.appliance.create({
         data: {
-            title: 'spaghetti',
-            description: 'A delicious spaghetti recipe.',
-            instructions: '1. Boil water. 2. Cook pasta. 3. Prepare sauce. 4. Mix pasta and sauce.',
-            nutritionFacts: 'Calories: 200, Protein: 7g, Carbs: 30g, Fat: 5g',
-            cookingTips: 'Use fresh tomatoes for the sauce.',
-            extraNotes: 'Can be stored in the fridge for up to 3 days.',
-            createdAt: set(new Date(), { hours: 8, minutes: 30 }),
-            updatedAt: set(new Date(), { hours: 8, minutes: 30 }),
-            userId: jp.id, // Associate recipe with the user
-        },
+            name: 'Cooking Pan',
+            description: 'A versatile stove top cooking tool.',
+            createdAt: new Date()
+        }
     });
+
+    const oven = await prisma.appliance.create({
+        data: {
+            name: 'Oven',
+            description: 'An enclosed compartment for heating, baking, or drying.',
+            createdAt: new Date()
+        }
+    });
+
+    const microwave = await prisma.appliance.create({
+        data: {
+            name: 'Microwave',
+            description: 'A kitchen appliance that cooks food by exposing it to electromagnetic radiation.',
+            createdAt: new Date()
+        }
+    });
+
+    const vegan = await prisma.tag.create({
+        data: {
+            name: 'Vegan',
+            description: 'A diet that excludes animal products.',
+        }
+    });
+
+    const vegetarian = await prisma.tag.create({
+        data: {
+            name: 'Vegetarian',
+            description: 'A diet that excludes meat.',
+        }
+    });
+
+    const pasta = await prisma.tag.create({
+        data: {
+            name: 'Pasta',
+            description: 'A type of noodle dish.',
+        }
+    });
+
+    const italian = await prisma.tag.create({
+        data: {
+            name: 'Italian',
+            description: 'A type of cuisine.',
+        }
+    });
+
+    const egg = await prisma.ingredient.create({
+        data: {
+            name: 'Egg',
+            description: 'A food product.',
+            caloriesPerUnit: 70,
+            fatPerUnit: 5,
+            carbsPerUnit: 0,
+            proteinPerUnit: 6
+        }
+    })
+
+    const flour = await prisma.ingredient.create({
+        data: {
+            name: 'Flour',
+            description: 'A food product.',
+            caloriesPerUnit: 455,
+            fatPerUnit: 1,
+            carbsPerUnit: 95,
+            proteinPerUnit: 13
+        }
+    })
+
+    const sugar = await prisma.ingredient.create({
+        data: {
+            name: 'Sugar',
+            description: 'A food product.',
+            caloriesPerUnit: 387,
+            fatPerUnit: 0,
+            carbsPerUnit: 100,
+            proteinPerUnit: 0
+        }
+    })
+
+    const milk = await prisma.ingredient.create({
+        data: {
+            name: 'Milk',
+            description: 'A food product.',
+            caloriesPerUnit: 42,
+            fatPerUnit: 1,
+            carbsPerUnit: 5,
+            proteinPerUnit: 3
+        }
+    })
+
+    
+
+
+
+
 };
 
 (async () => {

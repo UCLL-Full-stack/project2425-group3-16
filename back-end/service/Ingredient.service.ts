@@ -3,9 +3,9 @@ import {Ingredient} from '../model/ingredient';
 import ingredientDb from '../repository/ingredient.db';
 import assert from 'node:assert';
 
-const creatIngredient = (
+const creatIngredient = async (
     {name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit }: IngredientsInput
-): Ingredient => {
+): Promise<Ingredient | null> => {
     const ingredient: Ingredient = new Ingredient({
         ingredientId: undefined,
         name,
@@ -16,20 +16,20 @@ const creatIngredient = (
         proteinPerUnit
     })
 
-    const ingredients: Ingredient[] = ingredientDb.getAllIngredients()
+    const ingredients: Ingredient[] = await ingredientDb.getAllIngredients()
     ingredients.forEach( i =>{
        const equals : Boolean =  i.equals(ingredient)
         if(equals){
             throw new Error(`we can't save this ingredient.`)
         }
     })
-    return ingredientDb.creatIngredient({ingredient: ingredient});
+    return await ingredientDb.creatIngredient({ingredient: ingredient});
 }
 
-const updateIngredient = (
+const updateIngredient = async  (
     {ingredientId}:{ingredientId: number},
     {name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit }: IngredientsInput
-): Ingredient =>{
+): Promise < Ingredient | null > =>{
     const ingredient: Ingredient = new Ingredient({
         name,
         description,
@@ -39,9 +39,9 @@ const updateIngredient = (
         proteinPerUnit
     })
 
-    getIngredientById({ingredientId: ingredientId})
+    await getIngredientById({ingredientId: ingredientId})
 
-    const ingredients: Ingredient[] = ingredientDb.getAllIngredients()
+    const ingredients: Ingredient[] = await ingredientDb.getAllIngredients()
     ingredients.forEach( i =>{
         const equals : Boolean =  i.equals(ingredient)
         if(equals){
@@ -49,7 +49,7 @@ const updateIngredient = (
         }
     })
 
-    const  result: Ingredient | null  = ingredientDb.updateIngredient(
+    const  result: Ingredient | null  = await ingredientDb.updateIngredient(
         {ingredientId: ingredientId},
         {ingredient: ingredient}
     )
@@ -57,19 +57,21 @@ const updateIngredient = (
     return result
 }
 
-const getAllIngredients = (): Ingredient[] => {return ingredientDb.getAllIngredients()}
+const getAllIngredients = async (): Promise<Ingredient[]> => {
+    return await ingredientDb.getAllIngredients()
+}
 
-const getIngredientById=({ingredientId}: {ingredientId: number}): Ingredient | null => {
-    const ingredient: Ingredient | null = ingredientDb.getIngredientById({ ingredientId: ingredientId })
+const getIngredientById= async ({ingredientId}: {ingredientId: number}): Promise<Ingredient | null> => {
+    const ingredient: Ingredient | null =  await ingredientDb.getIngredientById({ ingredientId: ingredientId })
     if (ingredient == null) {
         throw new Error(`Ingredient whit id: ${ingredientId} can't be found`)
     }
     return ingredient
 }
 
-const deleteIngredient = ({ingredientId}: {ingredientId: number}): void => {
-    getIngredientById({ingredientId: ingredientId})
-    ingredientDb.deleteIngredient({ingredientsId: ingredientId})
+const deleteIngredient = async ({ingredientId}: {ingredientId: number}): Promise<void> => {
+    await getIngredientById({ingredientId: ingredientId})
+    await ingredientDb.deleteIngredients({ingredientsId: ingredientId})
 }
 
 export default {

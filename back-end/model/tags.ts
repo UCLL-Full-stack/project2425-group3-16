@@ -1,3 +1,5 @@
+import {Tag as TagPrima} from '@prisma/client';
+
 export class Tag {
     private tagId?: number;
     private name: string;
@@ -29,4 +31,9 @@ export class Tag {
             this.description === tag.description
         )
     }
+
+
+    static from({ tagId, name,  description}: TagPrima): Tag {
+        return new Tag({tagId, name, description})}
+
 }

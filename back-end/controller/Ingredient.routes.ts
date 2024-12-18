@@ -72,10 +72,10 @@ const ingredientRouter = express.Router();
  *               $ref: '#/components/schemas/Ingredient'
  */
 
-ingredientRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+ingredientRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const ingredientInput = <IngredientsInput> req.body
-        const result = ingredientService.creatIngredient(ingredientInput);
+        const result = await ingredientService.creatIngredient(ingredientInput);
         return res.status(201).json(result)
     }catch (error){
         next(error)
@@ -110,11 +110,11 @@ ingredientRouter.post('/', (req: Request, res: Response, next: NextFunction) => 
  *             schema:
  *               $ref: '#/components/schemas/Ingredient'
  */
-ingredientRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+ingredientRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try{
         const ingredientId: number = Number(req.params.id)
         const ingredientInput = <IngredientsInput> req.body
-        const result = ingredientService.updateIngredient(
+        const result = await ingredientService.updateIngredient(
             {ingredientId: ingredientId},
             ingredientInput
         )
@@ -141,9 +141,9 @@ ingredientRouter.put('/:id', (req: Request, res: Response, next: NextFunction) =
  *               items:
  *                 $ref: '#/components/schemas/Ingredient'
  */
-ingredientRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+ingredientRouter.get('/', async  (req: Request, res: Response, next: NextFunction) => {
     try{
-        const result = ingredientService.getAllIngredients()
+        const result = await ingredientService.getAllIngredients()
         res.status(200).json(result)
     }catch (error) {
         next(error)
@@ -172,10 +172,10 @@ ingredientRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/Ingredient'
  */
-ingredientRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+ingredientRouter.get('/:id', async(req: Request, res: Response, next: NextFunction) => {
     try{
         const ingredientId: number = Number(req.params.id)
-        const result = ingredientService.getIngredientById({ingredientId: ingredientId})
+        const result = await ingredientService.getIngredientById({ingredientId: ingredientId})
         return res.status(200).json(result)
     }catch (error) {
         next(error)
@@ -205,10 +205,10 @@ ingredientRouter.get('/:id', (req: Request, res: Response, next: NextFunction) =
  *               message:
  *                 type: string
  */
-ingredientRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+ingredientRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try{
         const ingredientId: number = Number(req.params.id)
-        ingredientService.deleteIngredient({ingredientId: ingredientId})
+         await ingredientService.deleteIngredient({ingredientId: ingredientId})
         return res.status(200).json({'message': `successfully deleted ingredient whit id: ${ingredientId}`})
     }catch (error) {
         next(error)

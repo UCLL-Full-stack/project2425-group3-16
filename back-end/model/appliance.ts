@@ -1,3 +1,5 @@
+import {Appliance as AppliancePrisma} from '@prisma/client';
+
 export class Appliance {
     private applianceId?: number;
     private name: string;
@@ -72,5 +74,15 @@ export class Appliance {
         // if (a.updated_at !== undefined && a.updated_at < a.created_at) {
         //     throw new Error('The updated date cannot be before the creation date.');
         // }
+    }
+
+    static from ({applianceId ,name, description, createdAt, updatedAt}: AppliancePrisma){
+        return new Appliance({
+            applianceId,
+            name,
+            description,
+            created_at: createdAt,
+            updated_at: updatedAt
+        })
     }
 }

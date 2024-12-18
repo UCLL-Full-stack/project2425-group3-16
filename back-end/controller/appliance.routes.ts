@@ -57,10 +57,10 @@ const applianceRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Appliance'
  */
-applianceRouter.post('/', (req: Request, res: Response, next: NextFunction) =>{
+applianceRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>{
     try{
         const applianceInput = <ApplianceInput> req.body;
-        const result = applianceService.creatAppliance(applianceInput);
+        const result = await applianceService.creatAppliance(applianceInput);
         return res.status(201).json(result);
     }catch (error){
         next(error)
@@ -96,11 +96,11 @@ applianceRouter.post('/', (req: Request, res: Response, next: NextFunction) =>{
  *               $ref: '#/components/schemas/Appliance'
  */
 
-applianceRouter.put('/:id', (req: Request, res: Response, next:NextFunction)=> {
+applianceRouter.put('/:id', async  (req: Request, res: Response, next:NextFunction)=> {
     try {
         const applianceInput = <ApplianceInput> req.body
         const applianceId: number =  Number(req.params.id)
-        const result = applianceService.updateAppliance(
+        const result = await applianceService.updateAppliance(
             {applianceId: applianceId},
              applianceInput
         )
@@ -125,9 +125,9 @@ applianceRouter.put('/:id', (req: Request, res: Response, next:NextFunction)=> {
  *             schema:
  *               $ref: '#/components/schemas/Appliance'
  */
-applianceRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+applianceRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const result = applianceService.getAllAppliances()
+        const result = await applianceService.getAllAppliances()
         res.status(200).json(result);
     }catch (error){
         next((error))
@@ -157,10 +157,10 @@ applianceRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/Appliance'
  */
-applianceRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+applianceRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try{
         const applianceId: number = Number(req.params.id)
-        const result = applianceService.getApplianceById({applianceId: applianceId})
+        const result = await applianceService.getApplianceById({applianceId: applianceId})
         return res.status(200).json(result);
     }catch (error){
         next(error)
@@ -190,11 +190,13 @@ applianceRouter.get('/:id', (req: Request, res: Response, next: NextFunction) =>
  *               message:
  *                 type: string
  */
-applianceRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+applianceRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try{
         const applianceId: number = Number(req.params.id)
-        applianceService.deleteAppliance({applianceId: applianceId})
-        res.status(200).json({'message': `success appliance with id: ${applianceId} is deleted.`})
+        const result = await applianceService.deleteAppliance({applianceId: applianceId})
+        if(result){
+            res.status(200).json({'message': `success appliance with id: ${applianceId} is deleted.`})
+        }
     }catch (error){
         next(error)
     }

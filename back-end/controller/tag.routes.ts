@@ -59,10 +59,10 @@ const tagRouter = express.Router();
  *                 errorMessage:
  *                   type: string
  */
-tagRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+tagRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try{
         const tagInput = <TagInput>req.body
-        const result = tagServerice.createTag(tagInput)
+        const result = await tagServerice.createTag(tagInput)
         return res.status(201).json(result)
     }catch (error){
         next(error)
@@ -97,11 +97,11 @@ tagRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/Tag'
  */
-tagRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+tagRouter.put('/:id', async(req: Request, res: Response, next: NextFunction) => {
     try {
         const tagInput = <TagInput>req.body
         const tagId: number = Number(req.params.id)
-        const result = tagServerice.updateTag(
+        const result = await tagServerice.updateTag(
             {tagId: tagId},
             tagInput
         )
@@ -133,11 +133,11 @@ tagRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/Tag'
  */
-tagRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+tagRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try{
         const tagInput = <TagInput>req.body
         const tagId: number = Number(req.params.id)
-        const result = tagServerice.updateTag(
+        const result = await tagServerice.updateTag(
             {tagId: tagId},
             tagInput
         )
@@ -164,9 +164,9 @@ tagRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
  *               items:
  *                 $ref: '#/components/schemas/Tag'
  */
-tagRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+tagRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = tagServerice.getAllTags()
+        const result = await tagServerice.getAllTags()
         return res.status(200).json(result)
     }catch (error){
         next(error)
@@ -195,10 +195,10 @@ tagRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/Tag'
  */
-tagRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+tagRouter.get('/:id', async(req: Request, res: Response, next: NextFunction) => {
     try{
         const tagId: number = Number(req.params.id)
-        const result = tagServerice.getTagById({tagId: tagId})
+        const result = await tagServerice.getTagById({tagId: tagId})
         return res.status(200).json(result)
     }catch (error){
         next(error)
@@ -228,10 +228,10 @@ tagRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
  *               message:
  *                 type: string
  */
-tagRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+tagRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try{
         const tagId: number = Number(req.params.id)
-        tagServerice.deleteTag({tagId: tagId})
+        await tagServerice.deleteTag({tagId: tagId})
         return res.status(200).json({'message':`we successfully deleted tag with id: ${tagId}`})
     }catch (error){
         next(error)

@@ -1,4 +1,4 @@
-import {RecipeIngredient} from "./recipeingredient";
+import {Ingredient as IngredientPrisma } from '@prisma/client';
 
 export class Ingredient {
     private ingredientId?: number;
@@ -100,6 +100,14 @@ export class Ingredient {
             this.fatPerUnit === ingredient.getFatPerUnit() &&
             this.carbsPerUnit === ingredient.getCarbsPerUnit() &&
             this.proteinPerUnit === ingredient.getProteinPerUnit()
+        )
+    }
+
+    static from(
+        {ingredientId, name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit}: IngredientPrisma
+    ): Ingredient{
+        return new Ingredient(
+            {ingredientId, name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit}
         )
     }
 

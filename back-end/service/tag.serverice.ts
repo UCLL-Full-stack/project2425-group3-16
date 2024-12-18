@@ -4,30 +4,33 @@ import tagDb from '../repository/tag.db';
 import assert from 'node:assert';
 
 
-const createTag = (
+const createTag = async (
     { name, description }: TagInput
-): Tag => {
+): Promise<Tag | null> => {
     const tag: Tag = new Tag({ name, description });
 
-    const tags: Tag[] = getAllTags();
+    const tags: Tag[] = await getAllTags();
+
     tags.forEach(t => {
         const equals: boolean = t.equals(tag);
         if (equals) {
             throw new Error(`we can't save this tag`);
         }
     });
-    return tagDb.creatTag({ tag: tag });
+
+    return await tagDb.creatTag({ tag: tag });
 };
 
-const updateTag = (
+const updateTag = async (
     { tagId }: { tagId: number },
     { name, description }: TagInput
-): Tag | null => {
+): Promise<Tag | null> => {
+
     const tag: Tag = new Tag({ name, description });
 
-    getTagById({ tagId: tagId });
+    await getTagById({ tagId: tagId });
 
-    const tags: Tag[] = getAllTags();
+    const tags: Tag[] =  await getAllTags();
     tags.forEach(t => {
         const equals: boolean = t.equals(tag);
         if (equals) {
@@ -35,7 +38,7 @@ const updateTag = (
         }
     });
 
-    const result: Tag | null = tagDb.updateTag(
+    const result: Tag | null = await tagDb.updateTag(
         { tagId: tagId },
         { tag: tag }
     );
@@ -43,21 +46,21 @@ const updateTag = (
     return result;
 };
 
-const getAllTags = (): Tag[] => {
-    return tagDb.getAllTags();
+const getAllTags = async (): Promise<Tag[]> => {
+    return await tagDb.getAllTags();
 };
 
-const getTagById = ({ tagId }: { tagId: number }) => {
-    const tag = tagDb.getTagById({ tagId });
+const getTagById = async ({ tagId }: { tagId: number }) => {
+    const tag = await tagDb.getTagById({ tagId });
     if (!tag) {
         throw new Error(`Tag with id: ${tagId} does not exist.`);
     }
     return tag;
 };
 
-const deleteTag = ({tagId}:{ tagId: number }): void | null => {
-    getTagById({ tagId: tagId });
-    tagDb.deleteTag({ tagId: tagId });
+const deleteTag = async  ({tagId}:{ tagId: number }): Promise<Boolean> => {
+    await getTagById({ tagId: tagId });
+    return  await tagDb.deleteTag({ tagId: tagId });
 };
 
 export default {

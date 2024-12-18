@@ -3,10 +3,13 @@ import {Appliance} from "../model/appliance";
 import applianceDb from "../repository/appliance.db";
 import assert from "node:assert";
 
-const creatAppliance = ({name, description, created_at}: ApplianceInput): Appliance => {
+const creatAppliance = async (
+    {name, description, created_at}: ApplianceInput
+): Promise<Appliance | null> => {
+
     const appliance: Appliance = new Appliance({ name, description, created_at });
 
-    const appliances: Appliance[] = applianceDb.getAllAppliances()
+    const appliances: Appliance[] = await applianceDb.getAllAppliances()
     appliances.forEach((a) =>{
         const equals: Boolean =  a.equals(appliance)
         if(equals){
@@ -14,18 +17,19 @@ const creatAppliance = ({name, description, created_at}: ApplianceInput): Applia
         }
     })
 
-    return applianceDb.createAppliance({appliance})
+    return await applianceDb.createAppliance({newAppliance: appliance})
 }
 
-const updateAppliance = (
+const updateAppliance = async (
     {applianceId}: {applianceId: number},
     {name, description, created_at, updated_at }: ApplianceInput
-): Appliance => {
+): Promise<Appliance | null> => {
+
     const appliance: Appliance = new Appliance({ name, description, created_at, updated_at });
 
-    getApplianceById({applianceId: applianceId})
+    await getApplianceById({applianceId: applianceId})
 
-    const appliances: Appliance[] = applianceDb.getAllAppliances()
+    const appliances: Appliance[] = await applianceDb.getAllAppliances()
     appliances.forEach((a: Appliance) =>{
         const equals: Boolean =  a.equals(appliance)
         if(equals){
@@ -33,28 +37,35 @@ const updateAppliance = (
         }
     })
 
-    const result: Appliance | null = applianceDb.updateAppliance(
+    const result: Appliance | null = await applianceDb.updateAppliance(
         {applianceId: applianceId},
         {newAppliance: appliance}
     )
 
     assert(result, 'Something when wrong in the database.')
-    return  result;
+    return result;
 }
 
-const getApplianceById = ({applianceId}: {applianceId: number}): Appliance => {
-    const appliance: Appliance | null = applianceDb.getApplianceById({applianceId: applianceId})
+const getApplianceById = async (
+    {applianceId}: {applianceId: number}
+): Promise<Appliance> => {
+    const appliance: Appliance | null = await applianceDb.getApplianceById({applianceId: applianceId})
     if(!appliance){
         throw new Error(`Appliance with id: ${applianceId} doesn't exist.`)
     }
     return  appliance
 }
 
-const getAllAppliances = (): Appliance[] => applianceDb.getAllAppliances()
+const getAllAppliances = async (): Promise<Appliance[]> => {
+    return await applianceDb.getAllAppliances()
+}
 
-const deleteAppliance = ({applianceId}: {applianceId: number}): void => {
-    getApplianceById({applianceId: applianceId})
-    applianceDb.deleteAppliance({applianceId: applianceId})
+const deleteAppliance = async (
+    {applianceId}: {applianceId: number}
+): Promise<boolean> => {
+
+    await getApplianceById({applianceId: applianceId})
+    return  await applianceDb.deleteAppliance({applianceId: applianceId})
 }
 
 export default {
