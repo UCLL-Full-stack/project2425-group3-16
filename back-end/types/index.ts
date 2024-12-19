@@ -39,5 +39,12 @@ type TagInput = {
     description:string
 }
 
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+    role: Role
+};
 
-export { RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput };
+
+export { RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput, AuthenticationResponse };

@@ -24,12 +24,12 @@ export type Recipe = {
 export type Role = 'admin' | 'user' | 'guest';
 
 export type User = {
-    _username: string;
-    _firstName: string;
-    _lastName: string;
-    _email: string;
-    _password: string;
-    _role: Role;
+    _username?: string;
+    _firstName?: string;
+    _lastName?: string;
+    _email?: string;
+    _password?: string;
+    _role?: Role;
 }
 
 export type Tag = {
@@ -37,3 +37,8 @@ export type Tag = {
     _name: string;
     _description: string;
 }
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};
