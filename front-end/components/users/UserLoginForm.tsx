@@ -34,7 +34,7 @@ const UserLoginForm: React.FC = () => {
         return result;
     };
 
-    const handleSubmit = async (event: { preventDefault: () => void; }) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         clearErrors();
@@ -43,6 +43,10 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
+        const response = await UserService.loginUser({ _username: name, _password: password })
+        if (response.succes) {
+
+        }
         setStatusMessages([
             {
                 message: `Login succesful. Redirecting to homepage...`,
@@ -50,7 +54,7 @@ const UserLoginForm: React.FC = () => {
             },
         ]);
 
-        localStorage.setItem("loggedInUser", name);
+        sessionStorage.setItem("loggedInUser", name);
 
         setTimeout(() => {
             router.push("/");
