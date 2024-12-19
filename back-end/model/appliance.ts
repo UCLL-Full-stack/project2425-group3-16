@@ -68,12 +68,6 @@ export class Appliance {
         if (!a.description?.trim()) {
             throw new Error('Description can be left empty.');
         }
-        // if (a.created_at < new Date()) {
-        //     throw new Error('The creation date cannot be in the past.');
-        // }
-        // if (a.updated_at !== undefined && a.updated_at < a.created_at) {
-        //     throw new Error('The updated date cannot be before the creation date.');
-        // }
     }
 
     static from ({applianceId ,name, description, createdAt, updatedAt}: AppliancePrisma){

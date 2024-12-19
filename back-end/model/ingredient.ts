@@ -1,14 +1,14 @@
-import {Ingredient as IngredientPrisma } from '@prisma/client';
+import { Ingredient as IngredientPrisma } from '@prisma/client';
 
 export class Ingredient {
     private ingredientId?: number;
     private name: string;
     private description: string;
     private caloriesPerUnit: number;
-    private fatPerUnit: number
+    private fatPerUnit: number;
     private carbsPerUnit: number;
     private proteinPerUnit: number;
-    //private recipeIngredients?: RecipeIngredient[];
+
 
     constructor(ingredient: {
         ingredientId?: number,
@@ -17,50 +17,46 @@ export class Ingredient {
         caloriesPerUnit: number,
         fatPerUnit: number,
         carbsPerUnit: number,
-        proteinPerUnit:number
-        //recipeIngredients?: RecipeIngredient[]
+        proteinPerUnit: number
     }) {
-        this.ingredientId= ingredient.ingredientId
-        this.name = ingredient.name
-        this.description = ingredient.description
-        this.caloriesPerUnit = ingredient.caloriesPerUnit
-        this.fatPerUnit = ingredient.fatPerUnit
-        this.carbsPerUnit = ingredient.carbsPerUnit
-        this.proteinPerUnit = ingredient.proteinPerUnit
-        //this.recipeIngredients = ingredient.recipeIngredients
+        this.validate(ingredient);
+
+        this.ingredientId = ingredient.ingredientId;
+        this.name = ingredient.name;
+        this.description = ingredient.description;
+        this.caloriesPerUnit = ingredient.caloriesPerUnit;
+        this.fatPerUnit = ingredient.fatPerUnit;
+        this.carbsPerUnit = ingredient.carbsPerUnit;
+        this.proteinPerUnit = ingredient.proteinPerUnit;
     }
 
-    getIngredientId (): number | undefined {
-        return this.ingredientId
+    getIngredientId(): number | undefined {
+        return this.ingredientId;
     }
 
     getName(): string {
-        return  this.name
+        return this.name;
     }
 
     getDescription(): string {
-        return this.description
+        return this.description;
     }
 
     getCaloriesPerUnit(): number {
-        return this.caloriesPerUnit
+        return this.caloriesPerUnit;
     }
 
     getFatPerUnit(): number {
-        return  this.fatPerUnit
+        return this.fatPerUnit;
     }
 
     getCarbsPerUnit(): number {
-        return  this.carbsPerUnit
+        return this.carbsPerUnit;
     }
 
     getProteinPerUnit(): number {
-        return this.proteinPerUnit
+        return this.proteinPerUnit;
     }
-
-    // getRecipeIngredients(): RecipeIngredient[] | undefined {
-    //     return this.recipeIngredients
-    // }
 
 
     validate(i: {
@@ -70,25 +66,25 @@ export class Ingredient {
         caloriesPerUnit: number,
         fatPerUnit: number,
         carbsPerUnit: number,
-        proteinPerUnit:number
+        proteinPerUnit: number
     }): void {
         if (!i.name?.trim()) {
-            throw new Error("Name is required");
+            throw new Error('Name is required');
         }
         if (!i.description?.trim()) {
-            throw new Error("Description is required");
+            throw new Error('Description is required');
         }
         if (i.caloriesPerUnit <= 0) {
-            throw new Error("Calories per unit must be greater than 0");
+            throw new Error('Calories per unit must be greater than 0');
         }
         if (i.fatPerUnit < 0) {
-            throw new Error("Fat per unit cannot be negative");
+            throw new Error('Fat per unit cannot be negative');
         }
         if (i.carbsPerUnit < 0) {
-            throw new Error("Carbs per unit cannot be negative");
+            throw new Error('Carbs per unit cannot be negative');
         }
         if (i.proteinPerUnit < 0) {
-            throw new Error("Protein per unit cannot be negative");
+            throw new Error('Protein per unit cannot be negative');
         }
     }
 
@@ -100,15 +96,15 @@ export class Ingredient {
             this.fatPerUnit === ingredient.getFatPerUnit() &&
             this.carbsPerUnit === ingredient.getCarbsPerUnit() &&
             this.proteinPerUnit === ingredient.getProteinPerUnit()
-        )
+        );
     }
 
     static from(
-        {ingredientId, name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit}: IngredientPrisma
-    ): Ingredient{
+        { ingredientId, name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit }: IngredientPrisma
+    ): Ingredient {
         return new Ingredient(
-            {ingredientId, name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit}
-        )
+            { ingredientId, name, description, caloriesPerUnit, fatPerUnit, carbsPerUnit, proteinPerUnit }
+        );
     }
 
 }
