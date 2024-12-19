@@ -1,5 +1,5 @@
 export type Appliance = {
-    applianceId: number
+    applianceId?: number
     name: string
     description: string
     created_at: Date
