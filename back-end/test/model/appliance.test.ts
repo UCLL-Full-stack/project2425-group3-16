@@ -41,3 +41,33 @@ test(`given: two different appliances, when: the appliance.equals method is call
     // then
     expect(isEqual).toBe(false);
 });
+
+test('given: invalid values (Bad Id) for appliances, when: appliance  is created, then: an error is thrown.', () =>{
+    // given
+    const invalidApplianceId: number = -1 ;
+    //when
+    const appliance = () => new Appliance({applianceId: invalidApplianceId, name, description, created_at: createdAt});
+
+    //then
+    expect(appliance).toThrow('The id of an object cannot be negative, this is not a valid object.')
+})
+
+test('given: valid invalid values (bad name) for appliances, when: appliance  is created, then: an error is thrown.', () =>{
+    // given
+    const invalidName: string = "  ";
+    //when
+    const appliance = () => new Appliance({applianceId, name: invalidName, description, created_at: createdAt});
+
+    //then
+    expect(appliance).toThrow('Name can not be empty.')
+})
+
+test('given: valid invalid values (bad description) for appliances, when: appliance  is created, then: an error is thrown.', () =>{
+    // given
+    const invalidDescription: string = "  ";
+    //when
+    const appliance = () => new Appliance({applianceId, name, description: invalidDescription, created_at: createdAt});
+
+    //then
+    expect(appliance).toThrow('Description can be left empty.')
+})

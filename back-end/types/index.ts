@@ -1,7 +1,23 @@
+type ApplianceInput = {
+    applianceId?: number
+    name: string
+    description: string
+    created_at: Date
+    updated_at?: Date
+}
+type IngredientsInput = {
+    ingredientId?: number;
+    name: string;
+    description: string;
+    caloriesPerUnit: number;
+    fatPerUnit: number
+    carbsPerUnit: number;
+    proteinPerUnit: number;
+}
+
 type RecipeIngredientInput = {
-    recipeingredientId?: number;
-    recipeId: number;
-    ingredientId: number;
+    recipeIngredientId?: number;
+    ingredient: IngredientsInput;
     unit: string;
     quantity: number;
 };
@@ -21,7 +37,7 @@ type RecipeInput = {
     tags: TagInput[]
 }
 
-type Role = 'admin' | 'user' | 'guest';
+type Role = 'admin' | 'chef' | 'user';
 
 type UserInput = {
     userId?: number;
@@ -36,7 +52,7 @@ type UserInput = {
 type TagInput = {
     tagId?: number
     name: string
-    description:string
+    description: string
 }
 
 type AuthenticationResponse = {
@@ -47,4 +63,4 @@ type AuthenticationResponse = {
 };
 
 
-export { RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput, AuthenticationResponse };
+export { ApplianceInput, IngredientsInput, RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput, AuthenticationResponse };

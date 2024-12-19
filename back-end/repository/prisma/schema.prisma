@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  admin
+  chef
+  user
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
@@ -20,6 +26,7 @@ model User {
   lastName  String
   email     String   @unique
   password  String
+  role      Role     @default(user)
   recipes   Recipe[]
 }
 
@@ -36,4 +43,37 @@ model Recipe {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   // tags          Tag[]
+}
+
+model Appliance {
+  applianceId Int      @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Tag {
+  tagId       Int    @id @default(autoincrement())
+  name        String
+  description String
+}
+
+model Ingredient {
+  ingredientId     Int                @id @default(autoincrement())
+  name             String
+  description      String
+  caloriesPerUnit  Float
+  fatPerUnit       Float
+  carbsPerUnit     Float
+  proteinPerUnit   Float
+  RecipeIngredient RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  recipeIngredientId Int        @id @default(autoincrement())
+  ingredient         Ingredient @relation(fields: [ingredientId], references: [ingredientId])
+  ingredientId       Int
+  quantity           Float
+  unit               String
 }

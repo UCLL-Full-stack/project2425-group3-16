@@ -4,12 +4,15 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import {recipeRouter} from "./controller/recipe.routes";
-import {userRoutes} from "./controller/user.routes";
+import {applianceRouter} from "./controller/appliance.routes";
+import {tagRouter} from "./controller/tag.routes";
+import {userRouter} from "./controller/user.routes";
+import { ingredientRouter } from './controller/Ingredient.routes';
+import { recipeIngredientRouter } from './controller/recipeIngredient.routes';
 
 const app = express();
 dotenv.config();
-const port = process.env.APP_PORT || 3000;
+const port: string | 3000 = process.env.APP_PORT || 3000;
 
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
@@ -19,14 +22,21 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/recipes', recipeRouter)
-app.use('/user', userRoutes)
+app.use('/appliance', applianceRouter);
+app.use('/tag', tagRouter);
+app.use('/user', userRouter)
+app.use('/ingredient', ingredientRouter)
+app.use('/recipeIngredient', recipeIngredientRouter)
+
+app.get('/status', (req, res) => {
+    res.json({ message: 'Courses API is running...' });
+});
 
 const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Recipe share API',
+            title: 'Recipe API',
             version: '1.0.0',
         },
     },
@@ -35,10 +45,16 @@ const swaggerOpts = {
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(400).json({ status: 'application error', message: error.message });
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    } else if (err.name === 'CoursesError') {
+        res.status(400).json({ status: 'domain error', message: err.message });
+    } else {
+        res.status(400).json({ status: 'application error', message: err.message });
+    }
 });
 
 app.listen(port || 3000, () => {
-    console.log(`Back-end is running on port ${port}.`);
+    console.log(`Courses API is running on port ${port}.`);
 });

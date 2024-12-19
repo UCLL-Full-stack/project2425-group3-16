@@ -22,39 +22,65 @@ const users: User[] = [
     })
 ]
 
+const createUser = ({ user }: { user: User }): User => {
+    const newUser: User = new User({
+        id: users.length + 1,
+        username: user.getUsername(),
+        firstName: user.getFirstName(),
+        lastName: user.getLastName(),
+        email: user.getEmail(),
+        password: user.getPassword(),
+        role: user.getRole()
+    })
+    users.push(newUser)
+    return newUser
+}
+
+const updateUser = (
+    { userId }: { userId: number },
+    { user }: { user: User }
+): User | null => {
+    const oldUser: User | null = getUserById({ id: userId })
+    if (oldUser == null) { return null }
+    const newUser: User = new User({
+        id: oldUser?.getUserId(),
+        username: user.getUsername(),
+        firstName: user.getFirstName(),
+        lastName: user.getLastName(),
+        email: user.getEmail(),
+        password: user.getPassword(),
+        role: user.getRole()
+    })
+
+    const index: number = users.findIndex(u => u.getUserId() === userId)
+    if (index == -1) { return null }
+    users[index] = newUser
+    return newUser
+}
+
+const getAllUser = (): User[] => {
+    return users
+}
 
 const getUserById = ({ id }: { id: number }): User | null => {
     return users.find((user) => user.getUserId() === id) || null;
 }
 
 const getUserByUsername = ({ username }: { username: string }): User | null => {
-    return users.find((user) => user.getUsername() === username) || null;
+    return users.find((user) => user.getUsername() === username) || null
 }
 
-
-//TODO: pas aan wanneer db
-const createUser = async (user: User): Promise<User | null> => {
-    try {
-        const existingUser = users.find((existinguser) => existinguser.getUsername() === user.getUsername())
-        if (existingUser) {
-            throw new Error('User with the same username already exists.')
-        }
-        const newUser = new User({
-            username: user.getUsername(),
-            password: user.getPassword(),
-            firstName: user.getFirstName(),
-            lastName: user.getLastName(),
-            email: user.getEmail(),
-            role: user.getRole()
-        })
-        users.push(newUser)
-        return newUser
-    } catch (error) {
-        console.error(error)
-        throw new Error('See server log for details')
-    }
+const deleteUser = ({ userId }: { userId: number }): void | null => {
+    const index = users.findIndex(u => u.getUserId() === userId)
+    if (index == -1) { return null }
+    users.splice(index, 1)
 }
 
 export default {
-    getUserById, getUserByUsername, createUser
+    createUser,
+    updateUser,
+    getAllUser,
+    getUserById,
+    getUserByUsername,
+    deleteUser
 }

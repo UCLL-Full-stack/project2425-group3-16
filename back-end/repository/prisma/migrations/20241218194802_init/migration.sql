@@ -26,6 +26,17 @@ CREATE TABLE "Recipe" (
     CONSTRAINT "Recipe_pkey" PRIMARY KEY ("recipeId")
 );
 
+-- CreateTable
+CREATE TABLE "Appliance" (
+    "applianceId" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Appliance_pkey" PRIMARY KEY ("applianceId")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
