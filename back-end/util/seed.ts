@@ -10,8 +10,9 @@ const prisma = new PrismaClient();
 const main = async () => {
     await prisma.appliance.deleteMany();
     await prisma.tag.deleteMany();
-    await prisma.ingredient.deleteMany();
     await prisma.recipeIngredient.deleteMany();
+    await prisma.ingredient.deleteMany();
+    await prisma.user.deleteMany();
 
     const airFryer = await prisma.appliance.create({
         data: {
@@ -149,9 +150,29 @@ const main = async () => {
         }
     });
 
+    const marthe = await prisma.user.create({
+        data: {
+            username: 'marthe123',
+            firstName: 'Marthe',
+            lastName: 'DHooghe',
+            email: 'marthe.dhooghe@student.ucll.be',
+            password: await bcrypt.hash('marthe', 12),
+            role: 'admin'
+        }
+    });
+
+    const thomas = await prisma.user.create({
+        data: {
+            username: 'thomas456',
+            firstName: 'Thomas',
+            lastName: 'Goris',
+            email: 'thomas.goris@student.ucll.be',
+            password: await bcrypt.hash('thomas', 12),
+            role: 'chef'
+        }
+    });
 
 
-    
 
 
 

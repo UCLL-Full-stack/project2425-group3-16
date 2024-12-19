@@ -46,7 +46,7 @@ const UserLoginForm: React.FC = () => {
         setName('')
         setPassword('')
 
-        const user = { userName: name, password: password }
+        const user = { _username: name, _password: password }
         const response = await UserService.loginUser(user);
 
         if (response.status === 200) {
@@ -70,7 +70,7 @@ const UserLoginForm: React.FC = () => {
             const { errorMessage } = await response.json();
             setStatusMessages([{ message: errorMessage, type: 'error' }]);
         } else {
-            setStatusMessages([{ message: 'General Error', type: 'error' }]);
+            setStatusMessages([{ message: 'Username and/or password are incorrect. Try again.', type: 'error' }]);
         }
     };
 
