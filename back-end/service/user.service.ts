@@ -1,32 +1,31 @@
 import userDb from "../repository/user.db"
 import { UserInput } from '../types';
 import {User} from '../model/user';
+import bcrypt from 'bcrypt';
 
 
-const creatUser = (
+const creatUser = async (
     {username, firstName, lastName, email, password, role}:UserInput
-): User => {
+): Promise<User> => {
+    //check if the user already exists
+    const equals = await userDb.getUserByUsername({username})
+    if(equals){
+        throw new Error(`we already have a user whit username: ${username}`)
+    }
+
+    //hash the password
+    const hashedPassword = await bcrypt.hash(password, 12);
+    //create a new user so we valid the input
     const newUser: User = new User({
         username,
         firstName,
         lastName,
         email,
-        password,
+        password: hashedPassword,
         role
-    })
-    const equals = userDb.getUserByUsername({username})
-    if(equals){
-        throw new Error(`we already have a user whit username: ${username}`)
-    }
-
-    const users: User[] = getAllUser();
-    users.forEach((u) => {
-        const equals: boolean = u.equal(newUser);
-        if(equals){
-            throw new Error(`we can't save this user`);
-        }
     });
-    return userDb.creatUser({user: newUser})
+
+    return await userDb.creatUser({user: newUser})
 }
 
 

@@ -1,4 +1,8 @@
 import { Ingredient } from './ingredient';
+import {
+    RecipeIngredient as RecipeIngredientPrisma,
+    Ingredient as IngredientPrisma
+} from '@prisma/client';
 
 export class RecipeIngredient {
     private recipeIngredientId?: number;
@@ -42,6 +46,21 @@ export class RecipeIngredient {
             this.unit === recipeIngredient.getUnit() &&
             this.quantity === recipeIngredient.getQuantity()
         );
+    }
+
+    static from(
+        {
+            recipeIngredientId,
+            unit,
+            quantity,
+            ingredient
+        }: RecipeIngredientPrisma & { ingredient: IngredientPrisma }): RecipeIngredient {
+        return new RecipeIngredient({
+            recipeIngredientId,
+            unit,
+            quantity,
+            ingredient: Ingredient.from(ingredient)
+        });
     }
 }
 

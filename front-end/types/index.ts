@@ -1,3 +1,11 @@
+export type Appliance = {
+    applianceId: number
+    name: string
+    description: string
+    created_at: Date
+    updated_at?: Date
+}
+
 export type RecipeIngredient = {
     recipeingredientId?: number;
     recipeId: number;
@@ -37,3 +45,8 @@ export type Tag = {
     _name: string;
     _description: string;
 }
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};

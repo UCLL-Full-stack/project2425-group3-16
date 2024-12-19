@@ -4,16 +4,16 @@ import recipeIngredientDb from '../repository/recipeIngredient.db';
 import { Ingredient } from '../model/ingredient';
 import ingredientService from './Ingredient.service';
 import assert from 'node:assert';
-
-const createRecipeIngredient = (
+import ingredientDb from '../repository/ingredient.db';
+const createRecipeIngredient = async (
     { ingredient: ingredientInput, unit, quantity }: RecipeIngredientInput
-): RecipeIngredient => {
-    const ingredient: Ingredient | null = ingredientService.getIngredientById({ ingredientId: ingredientInput.ingredientId ?? -1 });
+): Promise<RecipeIngredient> => {
+    const ingredient: Ingredient | null = await ingredientDb.getIngredientById({ ingredientId: ingredientInput.ingredientId ?? -1 });
     assert(ingredient !== null, `Ingredient with id ${ingredientInput.ingredientId} not found`);
 
     const recipeIngredient = new RecipeIngredient({ ingredient, unit, quantity });
 
-    const recipeIngredients: RecipeIngredient[] = recipeIngredientDb.getAllRecipeIngredients();
+    const recipeIngredients: RecipeIngredient[] = await recipeIngredientDb.getAllRecipeIngredients();
     recipeIngredients.forEach(r => {
         const equals: boolean = r.equals(recipeIngredient);
         if (equals) {
@@ -21,22 +21,21 @@ const createRecipeIngredient = (
         }
     });
 
-    return recipeIngredientDb.creatRecipeIngredient({ recipeIngredient: recipeIngredient });
-
+    return await recipeIngredientDb.creatRecipeIngredient({ recipeIngredient });
 };
 
-const updateRecipeIngredient = (
+const updateRecipeIngredient = async (
     { recipeIngredientId }: { recipeIngredientId: number },
     { ingredient: ingredientInput, unit, quantity }: RecipeIngredientInput
-): RecipeIngredient | null => {
-    getRecipeIngredientById({ recipeIngredientId: recipeIngredientId });
+): Promise<RecipeIngredient|null> => {
+    await getRecipeIngredientById({ recipeIngredientId: recipeIngredientId });
 
-    const ingredient: Ingredient | null = ingredientService.getIngredientById({ ingredientId: ingredientInput.ingredientId ?? -1 });
+    const ingredient: Ingredient | null = await ingredientService.getIngredientById({ ingredientId: ingredientInput.ingredientId ?? -1 });
     assert(ingredient !== null, `Ingredient with id ${ingredientInput.ingredientId} not found`);
 
     const recipeIngredient = new RecipeIngredient({ ingredient, unit, quantity });
 
-    const recipeIngredients: RecipeIngredient[] = recipeIngredientDb.getAllRecipeIngredients();
+    const recipeIngredients: RecipeIngredient[] = await recipeIngredientDb.getAllRecipeIngredients();
     recipeIngredients.forEach(r => {
         const equals: boolean = r.equals(recipeIngredient);
         if (equals) {
@@ -44,7 +43,7 @@ const updateRecipeIngredient = (
         }
     });
 
-    const result: RecipeIngredient | null = recipeIngredientDb.updateRecipeIngredient(
+    const result: RecipeIngredient | null = await recipeIngredientDb.updateRecipeIngredient(
         { recipeIngredientId: recipeIngredientId },
         { recipeIngredient: recipeIngredient }
     );
@@ -54,21 +53,25 @@ const updateRecipeIngredient = (
 
 };
 
-const getAllRecipeIngredients = (): RecipeIngredient[] => {
-    return recipeIngredientDb.getAllRecipeIngredients();
+const getAllRecipeIngredients = async (): Promise<RecipeIngredient[]> => {
+    return  await recipeIngredientDb.getAllRecipeIngredients();
 };
 
-const getRecipeIngredientById = ({ recipeIngredientId }: { recipeIngredientId: number }): RecipeIngredient | null => {
-    const recipeIngredient: RecipeIngredient | null = recipeIngredientDb.getRecipeIngredientById({ recipeIngredientId: recipeIngredientId });
+const getRecipeIngredientById = async (
+    { recipeIngredientId }: { recipeIngredientId: number }
+): Promise<RecipeIngredient | null> => {
+    const recipeIngredient: RecipeIngredient | null = await recipeIngredientDb.getRecipeIngredientById(
+        { recipeIngredientId: recipeIngredientId }
+    );
     if (recipeIngredient == null) {
         throw new Error(`RecipeIngredient with id: ${recipeIngredientId} can't be found.`);
     }
     return recipeIngredient;
 };
 
-const deleteRecipeIngredient = ({ recipeIngredientId }: { recipeIngredientId: number }): void => {
-    getRecipeIngredientById({ recipeIngredientId: recipeIngredientId });
-    recipeIngredientDb.deleteRecipeIngredient({ recipeIngredientId: recipeIngredientId });
+const deleteRecipeIngredient = async  ({ recipeIngredientId }: { recipeIngredientId: number }): Promise<void> => {
+    await getRecipeIngredientById({ recipeIngredientId: recipeIngredientId });
+    await recipeIngredientDb.deleteRecipeIngredient({ recipeIngredientId: recipeIngredientId });
 };
 
 export default {

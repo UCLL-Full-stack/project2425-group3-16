@@ -37,7 +37,7 @@ type RecipeInput = {
     tags: TagInput[]
 }
 
-type Role = 'admin' | 'user' | 'guest';
+type Role = 'admin' | 'chef' | 'user';
 
 type UserInput = {
     userId?: number;

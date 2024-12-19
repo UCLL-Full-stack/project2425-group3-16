@@ -1,79 +1,83 @@
 import { RecipeIngredient } from '../model/recipeingredient';
-import { Ingredient } from '../model/ingredient';
+import database from './database';
+const creatRecipeIngredient = async (
+    { recipeIngredient }: { recipeIngredient: RecipeIngredient }
+): Promise<RecipeIngredient> => {
+    try {
+        const recipeIngredientPrisma = await database.recipeIngredient.create({
+            data: {
+                ingredientId: recipeIngredient.getIngredient().getIngredientId() as number,
+                quantity: recipeIngredient.getQuantity(),
+                unit: recipeIngredient.getUnit(),
+            },
+            include: { ingredient: true }
+        });
+        return RecipeIngredient.from(recipeIngredientPrisma);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error see server log for details');
+    }
+};
 
-const recipeIngredients: RecipeIngredient[] = [
-    new RecipeIngredient({
-        recipeIngredientId: 1,
-        ingredient:  new Ingredient({
-            ingredientId: 1,
-            name: 'Tomato',
-            description: 'A red, edible fruit commonly used in salads and cooking',
-            caloriesPerUnit: 18,
-            fatPerUnit: 0.2,
-            carbsPerUnit: 3.9,
-            proteinPerUnit: 0.9
-        }),
-        unit: "Tomato",
-        quantity: 10
-    }),
-    new RecipeIngredient({
-        recipeIngredientId: 2,
-        ingredient: new Ingredient({
-            ingredientId: 2,
-            name: 'Egg',
-            description: 'A versatile ingredient used in many dishes',
-            caloriesPerUnit: 155,
-            fatPerUnit: 11,
-            carbsPerUnit: 1.1,
-            proteinPerUnit: 13
-        }),
-        unit: "egg",
-        quantity: 15
-    })
-]
-
-const creatRecipeIngredient = ({recipeIngredient}: {recipeIngredient: RecipeIngredient}): RecipeIngredient => {
-    const newRecipeIngredient: RecipeIngredient = new RecipeIngredient({
-        recipeIngredientId: recipeIngredients.length + 1,
-        ingredient: recipeIngredient.getIngredient(),
-        unit: recipeIngredient.getUnit(),
-        quantity: recipeIngredient.getQuantity()
-    })
-    recipeIngredients.push(newRecipeIngredient)
-    return recipeIngredient;
-}
-
-const updateRecipeIngredient = (
+const updateRecipeIngredient = async (
     {recipeIngredientId}: {recipeIngredientId: number},
     {recipeIngredient}: {recipeIngredient: RecipeIngredient}
-): RecipeIngredient | null => {
-    const oldRecipeIngredient: RecipeIngredient | null = getRecipeIngredientById({recipeIngredientId})
-
-    const newRecipeIngredient: RecipeIngredient = new RecipeIngredient({
-        recipeIngredientId: oldRecipeIngredient?.getRecipeIngredientId(),
-        ingredient: recipeIngredient.getIngredient() ?? oldRecipeIngredient?.getIngredient(),
-        unit: recipeIngredient.getUnit() ?? oldRecipeIngredient?.getUnit(),
-        quantity: recipeIngredient.getQuantity() ?? oldRecipeIngredient?.getQuantity()
-    })
-
-    const index: number = recipeIngredients.findIndex(r => r.getRecipeIngredientId() === recipeIngredientId);
-    if(index == -1){return  null}
-    recipeIngredients[index] = newRecipeIngredient
-    return newRecipeIngredient ?? null;
+): Promise <RecipeIngredient | null> => {
+    try {
+        const recipeIngredientPrisma = await database.recipeIngredient.update({
+            where: { recipeIngredientId: recipeIngredientId },
+            data: {
+                ingredientId: recipeIngredient.getIngredient().getIngredientId() as number,
+                quantity: recipeIngredient.getQuantity(),
+                unit: recipeIngredient.getUnit()
+            },
+            include: { ingredient: true }
+        });
+        return recipeIngredientPrisma ? RecipeIngredient.from(recipeIngredientPrisma) : null;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error see server log for details');
+    }
 }
 
-const getAllRecipeIngredients = (): RecipeIngredient[] => {
-    return recipeIngredients
+const getAllRecipeIngredients = async (): Promise<RecipeIngredient[]> => {
+    try {
+        const recipeIngredients = await database.recipeIngredient.findMany({
+            include: { ingredient: true }
+        });
+        return recipeIngredients.map(r => RecipeIngredient.from(r));
+    } catch (e) {
+        console.log(e);
+        throw new Error('Database error see server log for details');
+    }
 }
 
-const getRecipeIngredientById = ({recipeIngredientId}: {recipeIngredientId: number}): RecipeIngredient | null => {
-    return  recipeIngredients.find(r => r.getRecipeIngredientId() === recipeIngredientId) ?? null;
+const getRecipeIngredientById = async (
+    {recipeIngredientId}: {recipeIngredientId: number}
+): Promise<RecipeIngredient | null> => {
+    try {
+        const recipeIngredient = await database.recipeIngredient.findUnique({
+            where: { recipeIngredientId: recipeIngredientId },
+            include: { ingredient: true }
+        });
+        return recipeIngredient ? RecipeIngredient.from(recipeIngredient) : null;
+    } catch (e) {
+        console.log(e);
+        throw new Error('Database error see server log for details');
+    }
 }
 
-const deleteRecipeIngredient = ({recipeIngredientId}: {recipeIngredientId: number}): void | null => {
-    const index: number = recipeIngredients.findIndex(r => r.getRecipeIngredientId() === recipeIngredientId)
-    if(index == -1){return null }
-    recipeIngredients.splice(index, 1)
+
+const deleteRecipeIngredient = async ({recipeIngredientId}: {recipeIngredientId: number}): Promise<Boolean> => {
+    try {
+        const recipeIngredient = await database.recipeIngredient.delete({
+            where: { recipeIngredientId: recipeIngredientId }
+        });
+        return !!recipeIngredient;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Database error see server log for details');
+    }
 }
 
 export default {

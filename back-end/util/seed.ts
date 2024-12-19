@@ -11,6 +11,7 @@ const main = async () => {
     await prisma.appliance.deleteMany();
     await prisma.tag.deleteMany();
     await prisma.ingredient.deleteMany();
+    await prisma.recipeIngredient.deleteMany();
 
     const airFryer = await prisma.appliance.create({
         data: {
@@ -115,6 +116,40 @@ const main = async () => {
             proteinPerUnit: 3
         }
     })
+
+    const eggsForPancakes = await prisma.recipeIngredient.create({
+        data: {
+            unit: 'unit',
+            quantity: 10,
+            ingredientId: egg.ingredientId
+        }
+    });
+
+    const flowerForPancakes = await prisma.recipeIngredient.create({
+        data: {
+            unit: 'g',
+            quantity: 350,
+            ingredientId: flour.ingredientId
+        }
+    })
+
+    const sugarForPancakes = await prisma.recipeIngredient.create({
+        data: {
+            unit: 'g',
+            quantity: 50,
+            ingredientId: sugar.ingredientId
+        }
+    });
+
+    const milkForPancakes = await prisma.recipeIngredient.create({
+        data: {
+            unit: 'ml',
+            quantity: 500,
+            ingredientId: milk.ingredientId
+        }
+    });
+
+
 
     
 
