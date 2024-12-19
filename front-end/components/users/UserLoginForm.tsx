@@ -43,24 +43,35 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        const response = await UserService.loginUser({ _username: name, _password: password })
-        if (response.succes) {
+        setName('')
+        setPassword('')
 
+        const user = { userName: name, password: password }
+        const response = await UserService.loginUser(user);
+
+        if (response.status === 200) {
+            setStatusMessages([{ message: `Login succesful. Redirecting to homepage...`, type: "success", },])
+            const user = await response.json();
+            sessionStorage.setItem(
+                'loggedInUser',
+                JSON.stringify({
+                    token: user.token,
+                    userName: user.userName,
+                    userType: user.userType,
+                })
+            );
+            sessionStorage.setItem(
+                'role', user.userType
+            );
+            setTimeout(() => {
+                router.push('/')
+            }, 2000);
+        } else if (response.status === 401) {
+            const { errorMessage } = await response.json();
+            setStatusMessages([{ message: errorMessage, type: 'error' }]);
+        } else {
+            setStatusMessages([{ message: 'General Error', type: 'error' }]);
         }
-        setStatusMessages([
-            {
-                message: `Login succesful. Redirecting to homepage...`,
-                type: "success",
-            },
-        ]);
-
-        sessionStorage.setItem("loggedInUser", name);
-
-        setTimeout(() => {
-            router.push("/");
-        }, 2000);
-
-        UserService.loginUser({ _username: name, _password: password });
     };
 
     return (

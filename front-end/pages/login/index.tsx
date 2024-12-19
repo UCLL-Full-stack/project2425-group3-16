@@ -2,7 +2,7 @@ import Head from "next/head";
 import Header from "@components/header";
 import UserLoginForm from "@components/users/UserLoginForm";
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
     return (
         <>
             <Head>
@@ -18,4 +18,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default LoginPage;
