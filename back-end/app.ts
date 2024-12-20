@@ -27,7 +27,7 @@ app.use(expressjwt({
     secret: process.env.JWT_SECRET!,
     algorithms: ['HS256'],
 }).unless({
-    path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
+    path: ['/api-docs', /^\/api-docs\/.*/, '/user/login', '/user/signup', '/status'],
 })),
 
 

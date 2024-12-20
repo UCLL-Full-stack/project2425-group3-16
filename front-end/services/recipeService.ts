@@ -7,7 +7,7 @@ const getAllRecipes = () => {
     })
 }
 
-const getRecipeById = ({id}: { id: string }) => {
+const getRecipeById = ({ id }: { id: string }) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/recipes/${id}`, {
         method: 'GET',
         headers: {

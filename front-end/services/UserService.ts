@@ -1,17 +1,17 @@
-import { User } from "@types";
+import { AuthenticationRequest, User } from "@types";
 
-const loginUser = (user: User) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
+const loginUser = (auth: AuthenticationRequest) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(auth),
     });
 };
 
 const signupUser = (user: User) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/users/signup`, {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/user/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

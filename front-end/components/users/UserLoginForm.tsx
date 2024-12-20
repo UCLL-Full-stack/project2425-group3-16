@@ -1,5 +1,5 @@
 import UserService from "@services/UserService";
-import { StatusMessage } from "@types";
+import { AuthenticationRequest, StatusMessage } from "@types";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -21,12 +21,12 @@ const UserLoginForm: React.FC = () => {
     const validate = (): boolean => {
         let result = true;
 
-        if (!name && name.trim() === "") {
+        if (!name || name.trim() === "") {
             setNameError("Name is required");
             result = false;
         }
 
-        if (!password && password.trim() === "") {
+        if (!password || password.trim() === "") {
             setPasswordError("Password is required");
             result = false;
         }
@@ -43,13 +43,18 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        setName('')
-        setPassword('')
-
         const user = { _username: name, _password: password }
-        const response = await UserService.loginUser(user);
+        console.log(user)
+        const authenticationshizzle: AuthenticationRequest = {
+            username: name,
+            password: password
+        }
+        console.log(authenticationshizzle)
+        const response = await UserService.loginUser(authenticationshizzle);
 
         if (response.status === 200) {
+            setName('');
+            setPassword('')
             setStatusMessages([{ message: `Login succesful. Redirecting to homepage...`, type: "success", },])
             const user = await response.json();
             sessionStorage.setItem(

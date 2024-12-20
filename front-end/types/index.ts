@@ -50,3 +50,8 @@ export type StatusMessage = {
     message: string;
     type: "error" | "success";
 };
+
+export type AuthenticationRequest = {
+    username: string;
+    password: string;
+}
