@@ -23,15 +23,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(expressjwt({
-    secret: process.env.JWT_SECRET!,
-    algorithms: ['HS256'],
-}).unless({
-    path: ['/api-docs', /^\/api-docs\/.*/, '/user/login', '/user/signup', '/status'],
-})),
 
 
-    app.use('/appliance', applianceRouter);
+app.use('/appliance', applianceRouter);
 app.use('/tag', tagRouter);
 app.use('/user', userRouter)
 app.use('/ingredient', ingredientRouter)
