@@ -71,7 +71,7 @@ const getIngredientById= async ({ingredientId}: {ingredientId: number}): Promise
 
 const deleteIngredient = async ({ingredientId}: {ingredientId: number}): Promise<void> => {
     await getIngredientById({ingredientId: ingredientId})
-    await ingredientDb.deleteIngredients({ingredientsId: ingredientId})
+    await ingredientDb.deleteIngredients({ingredientId: ingredientId})
 }
 
 export default {

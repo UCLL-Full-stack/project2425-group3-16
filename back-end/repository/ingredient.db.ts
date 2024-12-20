@@ -54,7 +54,9 @@ const getAllIngredients = async (): Promise<Ingredient[]> => {
     }
 };
 
-const getIngredientById = async ({ ingredientId }: { ingredientId: number }): Promise<Ingredient | null> => {
+const getIngredientById = async (
+    { ingredientId }: { ingredientId: number }
+): Promise<Ingredient | null> => {
     try {
         const ingredientPrisma = await database.ingredient.findUnique({
             where: { ingredientId: ingredientId }
@@ -66,13 +68,15 @@ const getIngredientById = async ({ ingredientId }: { ingredientId: number }): Pr
     }
 };
 
-const deleteIngredients = async ({ ingredientsId }: { ingredientsId: number }): Promise<Boolean> => {
-    try{
+const deleteIngredients = async (
+    { ingredientId }: { ingredientId: number }
+): Promise<boolean> => {
+    try {
         const ingredientPrisma = await database.ingredient.delete({
-            where: { ingredientId: ingredientsId }
-        })
+            where: { ingredientId: ingredientId }
+        });
         return !!ingredientPrisma;
-    }catch (error) {
+    } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }

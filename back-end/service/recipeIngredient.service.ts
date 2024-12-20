@@ -69,7 +69,9 @@ const getRecipeIngredientById = async (
     return recipeIngredient;
 };
 
-const deleteRecipeIngredient = async  ({ recipeIngredientId }: { recipeIngredientId: number }): Promise<void> => {
+const deleteRecipeIngredient = async  (
+    { recipeIngredientId }: { recipeIngredientId: number }
+): Promise<void> => {
     await getRecipeIngredientById({ recipeIngredientId: recipeIngredientId });
     await recipeIngredientDb.deleteRecipeIngredient({ recipeIngredientId: recipeIngredientId });
 };

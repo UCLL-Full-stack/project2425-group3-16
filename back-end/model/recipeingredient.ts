@@ -18,6 +18,8 @@ export class RecipeIngredient {
         quantity: number;
 
     }) {
+        this.validate(recipeIngredient)
+
         this.recipeIngredientId = recipeIngredient.recipeIngredientId;
         this.unit = recipeIngredient.unit;
         this.quantity = recipeIngredient.quantity;
@@ -46,6 +48,25 @@ export class RecipeIngredient {
             this.unit === recipeIngredient.getUnit() &&
             this.quantity === recipeIngredient.getQuantity()
         );
+    }
+
+    validate(recipeIngredient: {
+        recipeIngredientId?: number;
+        ingredient: Ingredient
+        unit: string;
+        quantity: number;
+    }) {
+        if (recipeIngredient.recipeIngredientId !== undefined && recipeIngredient.recipeIngredientId < 0) {
+            throw new Error('Recipe ingredient id must be a positive number');
+        }
+
+        if (!recipeIngredient.unit?.trim()) {
+            throw new Error('Unit cannot be empty');
+        }
+
+        if (recipeIngredient.quantity < 0) {
+            throw new Error('Quantity must be a positive number');
+        }
     }
 
     static from(

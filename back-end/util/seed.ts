@@ -150,27 +150,47 @@ const main = async () => {
         }
     });
 
-    const marthe = await prisma.user.create({
+    enum Role {
+        Admin = 'admin',
+        Chef = 'chef',
+        User = 'user'
+    }
+
+    const user = await prisma.user.create({
         data: {
-            username: 'marthe123',
-            firstName: 'Marthe',
-            lastName: 'DHooghe',
-            email: 'marthe.dhooghe@student.ucll.be',
-            password: await bcrypt.hash('marthe', 12),
-            role: 'admin'
+            username: 'User',
+            firstName: 'User',
+            lastName: 'User',
+            email: 'user@example.com',
+            password: await bcrypt.hash('user', 10),
+            role: Role.User
         }
     });
 
-    const thomas = await prisma.user.create({
+    const chef = await prisma.user.create({
         data: {
-            username: 'thomas456',
-            firstName: 'Thomas',
-            lastName: 'Goris',
-            email: 'thomas.goris@student.ucll.be',
-            password: await bcrypt.hash('thomas', 12),
-            role: 'chef'
+            username: 'Chef',
+            firstName: 'Chef',
+            lastName: 'Chef',
+            email: 'chef@example.com',
+            password: await bcrypt.hash('chef', 10),
+            role: Role.Chef
         }
     });
+
+    const admin = await prisma.user.create({
+        data: {
+            username: 'Admin',
+            firstName: 'Admin',
+            lastName: 'Admin',
+            email: 'admin@exmaple.com',
+            password: await bcrypt.hash('admin', 10),
+            role: Role.Admin
+        }
+    });
+
+
+
 
 
 

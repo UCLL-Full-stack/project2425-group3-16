@@ -68,7 +68,7 @@ const getRecipeIngredientById = async (
 }
 
 
-const deleteRecipeIngredient = async ({recipeIngredientId}: {recipeIngredientId: number}): Promise<Boolean> => {
+const deleteRecipeIngredient = async ({recipeIngredientId}: {recipeIngredientId: number}): Promise<boolean> => {
     try {
         const recipeIngredient = await database.recipeIngredient.delete({
             where: { recipeIngredientId: recipeIngredientId }

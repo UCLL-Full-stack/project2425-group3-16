@@ -21,8 +21,7 @@
  *           type: string
  *           format: password
  *         role:
- *           type: string
- *           description: Role of the user (e.g., 'admin', 'user', etc.)
+ *           $ref: '#/components/schemas/Role'
  *     UserInput:
  *       type: object
  *       properties:
@@ -39,8 +38,28 @@
  *           type: string
  *           format: password
  *         role:
+ *           $ref: '#/components/schemas/Role'
+ *     Role:
+ *       type: string
+ *       enum: [admin, chef, user]
+ *     AuthenticationRequest:
+ *       type: object
+ *       properties:
+ *         username:
  *           type: string
- *           description: Role of the user (e.g., 'admin', 'user', etc.)
+ *         password:
+ *           type: string
+ *     AuthenticationResponse:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *         username:
+ *           type: string
+ *         fullname:
+ *           type: string
+ *         role:
+ *           type: string
  */
 
 import express, { NextFunction, Request, Response } from "express";
@@ -70,10 +89,10 @@ const userRouter = express.Router()
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body
-        const result = userService.createUser(userInput)
+        const result = await userService.createUser(userInput)
         res.status(201).json(result)
     } catch (error) {
         next(error)
@@ -95,9 +114,9 @@ userRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = userService.getAllUser()
+        const result = await userService.getAllUser()
         res.status(200).json(result)
     } catch (error) {
         next(error)
@@ -126,10 +145,10 @@ userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-userRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId: number = Number(req.params.id)
-        const result = userService.getUserById({ userId })
+        const result = await userService.getUserById({ userId })
         res.status(200).json(result)
     } catch (error) {
         next(error)
@@ -159,10 +178,10 @@ userRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
  *               message:
  *                 type: string
  */
-userRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId: number = Number(req.params.id)
-        userService.deleteUser({ userId })
+        await userService.deleteUser({ userId })
         res.status(204).json({ message: `User with id: ${userId} deleted` })
     } catch (error) {
         next(error)
@@ -171,8 +190,10 @@ userRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /users/signup:
+ * /user/signup:
  *  post:
+ *      tags:
+ *      - Authentication
  *      summary: Create a new User
  *      requestBody:
  *          required: true
@@ -186,7 +207,7 @@ userRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/User'
+ *                          $ref: '#/components/schemas/AuthenticationResponse'
  */
 userRouter.post(
     '/signup',
@@ -201,24 +222,27 @@ userRouter.post(
     }
 )
 
+
 /**
  * @swagger
- * /users/login:
- *  post:
- *      summary: Log a User in
- *      requestBody:
- *          required: true
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/AuthenticationRequest'
- *      responses:
- *          200:
- *              description: logged in user object
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/AuthenticationRequest'
+ * /user/login:
+ *   post:
+ *     tags:
+ *     - Authentication
+ *     summary: User can login
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AuthenticationRequest'
+ *     responses:
+ *       200:
+ *         description: The created user object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthenticationResponse'
  */
 userRouter.post(
     '/login',

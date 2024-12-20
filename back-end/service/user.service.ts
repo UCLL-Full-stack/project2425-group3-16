@@ -3,11 +3,12 @@ import userDb from "../repository/user.db"
 import { AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from "../util/jwt";
+import assert from 'node:assert';
 
 
 const createUser = async (
     { username, firstName, lastName, email, password, role }: UserInput
-): Promise<User> => {
+): Promise<AuthenticationResponse> => {
     //check if the user already exists
     const equals = await userDb.getUserByUsername({ username })
     if (equals) {
@@ -26,10 +27,24 @@ const createUser = async (
         role
     });
 
-    return await userDb.createUser({ user: newUser })
+    const result = await userDb.createUser({ user: newUser })
+    assert(result !== null, `something went wrong in the database.`)
+
+    const token = generateJwtToken({ username: username, role });
+
+    return {
+        token: token,
+        username: username,
+        fullname: `${result.getFirstName()} ${result.getLastName()}`,
+        role: role
+    };
+
 }
 
-const authenticate = async ({ username, role, password }: UserInput): Promise<AuthenticationResponse> => {
+const authenticate = async (
+    { username, role, password }: UserInput
+): Promise<AuthenticationResponse> => {
+
     const user = await getUserByUsername({ username });
     if (!user) {
         throw new Error('Incorrect username or password.')
@@ -47,19 +62,23 @@ const authenticate = async ({ username, role, password }: UserInput): Promise<Au
     };
 };
 
-const getAllUser = (): User[] => {
-    return userDb.getAllUser();
+const getAllUser = async (): Promise<User[]> => {
+    return await userDb.getAllUser();
 }
 
-const getUserById = ({ userId }: { userId: number }) => {
-    const user = userDb.getUserById({ id: userId })
+const getUserById = async (
+    { userId }: { userId: number }
+) => {
+    const user = await userDb.getUserById({ id: userId })
     if (!user) {
         throw new Error(`user with id: ${userId} does not exist.`)
     }
     return user;
 }
 
-const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
+const getUserByUsername = async (
+    { username }: { username: string }
+): Promise<User> => {
     const user = await userDb.getUserByUsername({ username });
     if (!user) {
         throw new Error(`User with username: ${username} does not exist.`);
@@ -67,15 +86,18 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     return user;
 };
 
-const deleteUser = ({ userId }: { userId: number }): void => {
-    getUserById({ userId })
-    userDb.deleteUser({ userId })
+const deleteUser = async (
+    { userId }: { userId: number }
+): Promise<void> => {
+    await getUserById({ userId })
+    await userDb.deleteUser({ userId })
 }
 
 export default {
     createUser,
     getAllUser,
     getUserById,
+    getUserByUsername,
     deleteUser,
     authenticate
 }
