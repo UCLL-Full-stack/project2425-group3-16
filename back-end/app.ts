@@ -4,11 +4,12 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import {applianceRouter} from "./controller/appliance.routes";
-import {tagRouter} from "./controller/tag.routes";
-import {userRouter} from "./controller/user.routes";
+import { applianceRouter } from "./controller/appliance.routes";
+import { tagRouter } from "./controller/tag.routes";
+import { userRouter } from "./controller/user.routes";
 import { ingredientRouter } from './controller/Ingredient.routes';
 import { recipeIngredientRouter } from './controller/recipeIngredient.routes';
+import { expressjwt } from 'express-jwt';
 
 const app = express();
 dotenv.config();
@@ -22,7 +23,15 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/appliance', applianceRouter);
+app.use(expressjwt({
+    secret: process.env.JWT_SECRET!,
+    algorithms: ['HS256'],
+}).unless({
+    path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
+})),
+
+
+    app.use('/appliance', applianceRouter);
 app.use('/tag', tagRouter);
 app.use('/user', userRouter)
 app.use('/ingredient', ingredientRouter)
@@ -56,5 +65,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port || 3000, () => {
-    console.log(`Courses API is running on port ${port}.`);
+    console.log(`Back-end is running on port ${port}.`);
 });
