@@ -10,8 +10,9 @@ const prisma = new PrismaClient();
 const main = async () => {
     await prisma.appliance.deleteMany();
     await prisma.tag.deleteMany();
-    await prisma.ingredient.deleteMany();
     await prisma.recipeIngredient.deleteMany();
+    await prisma.ingredient.deleteMany();
+    await prisma.user.deleteMany();
 
     const airFryer = await prisma.appliance.create({
         data: {
@@ -148,6 +149,46 @@ const main = async () => {
             ingredientId: milk.ingredientId
         }
     });
+
+    enum Role {
+        Admin = 'admin',
+        Chef = 'chef',
+        User = 'user'
+    }
+
+    const user = await prisma.user.create({
+        data: {
+            username: 'User',
+            firstName: 'User',
+            lastName: 'User',
+            email: 'user@example.com',
+            password: await bcrypt.hash('user', 10),
+            role: Role.User
+        }
+    });
+
+    const chef = await prisma.user.create({
+        data: {
+            username: 'Chef',
+            firstName: 'Chef',
+            lastName: 'Chef',
+            email: 'chef@example.com',
+            password: await bcrypt.hash('chef', 10),
+            role: Role.Chef
+        }
+    });
+
+    const admin = await prisma.user.create({
+        data: {
+            username: 'Admin',
+            firstName: 'Admin',
+            lastName: 'Admin',
+            email: 'admin@exmaple.com',
+            password: await bcrypt.hash('admin', 10),
+            role: Role.Admin
+        }
+    });
+
 
 
 

@@ -52,8 +52,15 @@ type UserInput = {
 type TagInput = {
     tagId?: number
     name: string
-    description:string
+    description: string
 }
 
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+    role: Role
+};
 
-export { ApplianceInput, IngredientsInput, RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput };
+
+export { ApplianceInput, IngredientsInput, RecipeIngredientInput, Role, RecipeInput, UserInput, TagInput, AuthenticationResponse };

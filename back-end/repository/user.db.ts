@@ -1,83 +1,92 @@
-import {User} from "../model/user";
+import { User } from '../model/user';
+import database from './database';
+
+const createUser = async ({ user }: { user: User }): Promise<User> => {
+    try {
+        const userPrisma = await database.user.create({
+            data: {
+                username: user.getUsername(),
+                firstName: user.getFirstName(),
+                lastName: user.getLastName(),
+                email: user.getEmail(),
+                password: user.getPassword(),
+                role: user.getRole()
+            }
+        });
+        return User.from(userPrisma);
+    } catch (error) {
+       console.log(error)
+        throw new Error('Something went wrong in the database see server logs for details');
+    }
+}
+
+const updateUser = async (
+    { userId }: { userId: number },
+    { user }: { user: User }
+): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.update({
+            where: { id: userId },
+            data: {
+                username: user.getUsername(),
+                firstName: user.getFirstName(),
+                lastName: user.getLastName(),
+                email: user.getEmail(),
+                password: user.getPassword(),
+                role: user.getRole()
+            }
+        });
+        return User.from(userPrisma);
+    } catch (error) {
+        console.log(error)
+        throw new Error('Something went wrong in the database see server logs for details');
+    }
+}
+
+const getAllUser = async (): Promise<User[]> => {
+    const usersPrisma = await database.user.findMany();
+    return usersPrisma.map(u => User.from(u));
+}
+
+const getUserById = async ({ id }: { id: number }): Promise<User | null>=> {
+    try{
+        const userPrisma = await database.user.findUnique({
+            where: { id: id }
+        })
+        return  userPrisma ? User.from(userPrisma) : null
+    }catch (error){
+        console.log(error)
+        throw new Error('Something went wrong in the database see server logs for details');
+    }
+}
 
 
-const users: User[] = [
-    new User({
-        id: 1,
-        username: '@AliceWonder',
-        firstName: 'Alice',
-        lastName: 'Wonder',
-        email: 'alicewonder@gmail.com',
-        password: 'alice123',
-        role: 'admin',
-    }),
-    new User({
-        id: 2,
-        username: '@JohnDoe',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@gmail.com',
-        password: 'john123',
-        role: 'user',
+const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
+   try{
+    const userPrisma = await database.user.findUnique({
+        where: { username: username }
     })
-]
-
-const creatUser = ({user}: {user: User}): User => {
-    const newUser: User = new User({
-        id: users.length + 1,
-        username: user.getUsername(),
-        firstName: user.getFirstName(),
-        lastName: user.getLastName(),
-        email: user.getEmail(),
-        password: user.getPassword(),
-        role: user.getRole()
-    })
-    users.push(newUser)
-    return newUser
+    return  userPrisma ? User.from(userPrisma) : null
+   }catch (error){
+    console.log(error)
+    throw new Error('Something went wrong in the database see server logs for details');
+   }
 }
 
-const updateUser = (
-    {userId}: {userId: number},
-    {user}: {user: User}
-): User | null =>{
-    const oldUser: User | null = getUserById({id: userId})
-    if(oldUser == null){return  null}
-    const newUser: User = new User({
-        id: oldUser?.getUserId(),
-        username: user.getUsername(),
-        firstName: user.getFirstName(),
-        lastName: user.getLastName(),
-        email: user.getEmail(),
-        password: user.getPassword(),
-        role: user.getRole()
-    })
-
-    const index: number = users.findIndex(u => u.getUserId() === userId)
-    if(index == -1){return  null}
-    users[index] = newUser
-    return newUser
-}
-
-const getAllUser = (): User[] => {
-    return users
-}
-
-const getUserById = ({id}: { id: number }): User | null => {
-    return users.find((user) => user.getUserId() === id) || null;
-}
-
-const getUserByUsername = ({username}: {username: string}): User | null => {
-    return users.find((user) => user.getUsername() === username) || null
-}
-
-const deleteUser = ({userId}: {userId: number}): void | null => {
-    const index = users.findIndex(u => u.getUserId() === userId)
-    if(index == -1){return  null}
-    users.splice(index, 1)
+const deleteUser = async ({ userId }: { userId: number }): Promise<boolean> => {
+    try {
+        const result = await database.user.delete({
+            where: { id: userId }
+        });
+        return !!result;
+    } catch (error) {
+        console.log(error)
+        throw new Error('Something went wrong in the database see server logs for details');
+    }
 }
 
 export default {
-    creatUser,
+    createUser,
     updateUser,
     getAllUser,
     getUserById,
