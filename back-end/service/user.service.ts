@@ -97,6 +97,7 @@ export default {
     createUser,
     getAllUser,
     getUserById,
+    getUserByUsername,
     deleteUser,
     authenticate
 }

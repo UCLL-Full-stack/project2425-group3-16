@@ -1,5 +1,5 @@
 import { Role } from '../types';
-import {User as UserPrisma} from '@prisma/client'
+import { User as UserPrisma } from '@prisma/client';
 
 export class User {
     private userId?: number;
@@ -19,6 +19,8 @@ export class User {
         password: string;
         role: Role;
     }) {
+        this.validate(user);
+
         this.userId = user.id;
         this.username = user.username;
         this.firstName = user.firstName;
@@ -52,11 +54,11 @@ export class User {
         return this.password;
     }
 
-    getRole(): Role {
+    public getRole(): Role {
         return this.role;
     }
 
-    equal(user: User): boolean {
+    public equal(user: User): boolean {
         return (
             this.username === user.getUsername() &&
             this.firstName === user.getFirstName() &&
@@ -67,7 +69,42 @@ export class User {
         );
     }
 
-    static from({id, username, firstName, lastName, email, password, role}: UserPrisma): User {
+    private validate(user: {
+        id?: number;
+        username: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        role: Role;
+    }): void {
+        if (user.id !== undefined && user.id < 0) {
+            throw new Error('The id of an object cannot be negative, this is not a valid object.');
+        }
+        if (!user.username?.trim()) {
+            throw new Error('Username cannot be empty.');
+        }
+        if (!user.firstName?.trim()) {
+            throw new Error('First name cannot be empty.');
+        }
+        if (!user.lastName?.trim()) {
+            throw new Error('Last name cannot be empty.');
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(user.email)) {
+            throw new Error('Invalid email format.');
+        }
+        const passwordRegex = /^.{2,}$/;
+        if (!passwordRegex.test(user.password)) {
+            throw new Error('Password must be at least 2 characters long.');
+        }
+        const validRoles: Role[] = ['admin', 'chef', 'user'];
+        if (!validRoles.includes(user.role)) {
+            throw new Error(`Role must be one of the following: ${validRoles.join(', ')}`);
+        }
+    }
+
+    static from({ id, username, firstName, lastName, email, password, role }: UserPrisma): User {
         return new User({
             id,
             username,
