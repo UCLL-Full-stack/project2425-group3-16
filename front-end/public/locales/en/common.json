@@ -1,0 +1,41 @@
+{
+  "app.title": "Sports App",
+  "general.error": "An error has occurred. Please try again later.",
+  "error.unauthorized": "Unauthorized",
+
+  "login": {
+    "title": "Login",
+    "button": "Login",
+    "success": "Login successful. Redirecting to homepage...",
+    "validate": {
+      "name": "Name is required",
+      "password": "Password is required"
+    },
+    "label": {
+      "username": "Username:",
+      "password": "Password:"
+    }
+  },
+
+  "header": {
+    "welcome": "Welcome",
+    "nav": {
+      "home": "Home",
+      "coaches": "Coaches",
+      "schedules": "Schedules",
+      "login": "Login",
+      "logout": "Logout"
+    }
+  },
+
+  "coaches": {
+    "title": "Coaches",
+    "coachOverviewTable": {
+      "firstname": "First name",
+      "lastname": "Last name",
+      "email": "Email",
+      "expertise": "Expertise"
+    },
+    "gamesForCoach": "Games coached by {{name}}"
+  }
+}

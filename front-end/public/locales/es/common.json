@@ -1,0 +1,41 @@
+{
+  "app.title": "Aplicación de Deportes",
+  "general.error": "Se ha producido un error. Por favor, inténtelo más tarde.",
+  "error.unauthorized": "No autorizado",
+
+  "login": {
+    "title": "Inicio de sesión",
+    "button": "Iniciar sesión",
+    "success": "Inicio de sesión exitoso. Redirigiendo a la página de inicio...",
+    "validate": {
+      "name": "El nombre es obligatorio",
+      "password": "Se requiere contraseña"
+    },
+    "label": {
+      "username": "Nombre de usuario:",
+      "password": "Contraseña:"
+    }
+  },
+
+  "header": {
+    "welcome": "Bienvenido",
+    "nav": {
+      "home": "Inicio",
+      "coaches": "Entrenadores",
+      "schedules": "Horarios",
+      "login": "Iniciar sesión",
+      "logout": "Cerrar sesión"
+    }
+  },
+
+  "coaches": {
+    "title": "Entrenadores",
+    "coachOverviewTable": {
+      "firstname": "Nombre",
+      "lastname": "Apellido",
+      "email": "Correo electrónico",
+      "expertise": "Especialidad"
+    },
+    "gamesForCoach": "Partidos entrenados por {{name}}"
+  }
+}

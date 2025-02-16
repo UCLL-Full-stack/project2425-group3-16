@@ -1,0 +1,72 @@
+// To generate the database and these tables, run:
+//Npx prisma migrate dev
+
+//regenerate the prisma-client
+//npx prisma generate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Coach {
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  expertise String
+  games     Game[]
+  schedules Schedule[]
+}
+
+model Player {
+  id           Int        @id @default(autoincrement())
+  userId       Int        @unique
+  user         User       @relation(fields: [userId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  playerNumber String     @unique
+  schedules    Schedule[]
+}
+
+model Game {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String
+  home        Boolean
+  season      Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  schedules   Schedule[]
+  coach       Coach[]
+}
+
+model Schedule {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  start     DateTime
+  end       DateTime
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    Int
+  coach     Coach    @relation(fields: [coachId], references: [id])
+  coachId   Int
+  players   Player[]
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  username  String  @unique
+  firstName String
+  lastName  String
+  email     String  @unique
+  password  String
+  role      String
+  coach     Coach?
+  player    Player?
+}
